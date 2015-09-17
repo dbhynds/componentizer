@@ -81,20 +81,38 @@ require('index.php');
 ### Override User-defined Order
 Component order can be specified on a template level in order to override the user-defined order by passing an array of base component slugs.
 
-For example:
-
 ```
-$components = array(
+$custom_order = array(
 	'page_header',
 	'content'
 	'comments'
 );
-Components\build($components);
+Components\build($custom_order);
 ```
+
+To view available component slugs, go to "Settings > Componentizer" and look at the section labelled "Component Files"
+
+### Specify a Custom Suffix
+Suffixes get appended to the base template to locate the appropriate component according to the template hierarchy. However, a custom suffix(es) can be designated.
+
+Specify a custom suffix:
+
+```
+$suffix = 'special';
+Components\build(false,$suffix);
+```
+
+Specify a collection of custom suffixes:
+
+```
+$suffixes = array('extra-special','special');
+Components\build(false,$suffixes);
+```
+
+Note: `false` should be passed as the first argument in order to not override the user-specified component order.
 
 ## Feature Requests
 Fields on the page reflect the order in the sidebar.
 
 ## Additional Information
-
 **Version:** 0.6.0

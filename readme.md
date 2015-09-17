@@ -115,4 +115,10 @@ Note: `false` should be passed as the first argument in order to not override th
 Fields on the page reflect the order in the sidebar.
 
 ## Additional Information
-**Version:** 0.6.4
+
+### Version: 0.6.4
+
+### Minimum Requirements
+
+* PHP >= 5.3.10
+* WordPress >= 3.4.0

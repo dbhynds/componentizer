@@ -105,7 +105,10 @@ Components\build(false,$suffix);
 Specify a collection of custom suffixes:
 
 ```
-$suffixes = array('extra-special','special');
+$suffixes = array(
+	'extra-special',
+	'special'
+);
 Components\build(false,$suffixes);
 ```
 

@@ -14,11 +14,11 @@ function build($components = false, $suffixes = null) {
 
   // Get the base components and their associated field groups
   $component_fields = get_option( 'componentizer_fields' );
-  $location_orders = get_option('componentizer_location_orders');
-  $visible_on_archive = get_option('componentizer_visible_on_archive');
 
   // If $components are specifically specified, use the posts' custom order.
   if ($components === false) {
+    $location_orders = get_option('componentizer_location_orders');
+    $visible_on_archive = get_option('componentizer_visible_on_archive');
     $components = array();
     $component_ids = get_post_meta( $post->ID, '_field_order', true );
     // Set the base components to load as determined by the $component_ids
@@ -63,7 +63,7 @@ function build($components = false, $suffixes = null) {
       array_push($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
     }
     $file = locate_template($templates,false,false);
-    include($file);
+    if ($file) include($file);
   }
 }
 

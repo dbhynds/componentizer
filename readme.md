@@ -72,11 +72,24 @@ After replacing the loop in the `index.php`, most other single and archive page 
 Assuming the loop has been replaced in the `index.php` file, the following code can be used to create custom page templates:
 
 ```
-<?php
 /**
  * Template Name: Custom Template
  */
-require('index.php'); ?>
+require('index.php');
+```
+
+### Override User-defined Order
+Component order can be specified on a template level in order to override the user-defined order by passing an array of base component slugs.
+
+For example:
+
+```
+$components = array(
+	'page_header',
+	'content'
+	'comments'
+);
+Components\build($components);
 ```
 
 ## Questions

@@ -92,5 +92,9 @@ $components = array(
 Components\build($components);
 ```
 
-## Questions
-Can the fields on the page reflect the order in the sidebar?
+## Feature Requests
+Fields on the page reflect the order in the sidebar.
+
+## Additional Information
+
+**Version:** 0.6.0

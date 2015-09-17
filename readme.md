@@ -115,4 +115,4 @@ Note: `false` should be passed as the first argument in order to not override th
 Fields on the page reflect the order in the sidebar.
 
 ## Additional Information
-**Version:** 0.6.0
+**Version:** 0.6.4

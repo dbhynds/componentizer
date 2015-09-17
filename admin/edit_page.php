@@ -3,7 +3,7 @@
 namespace Components\Admin;
 
 // Don't bother on the front end or non-admins
-if (!is_admin() && !current_user_can('edit_componentizer_options')) return;
+if (!is_admin()) return;
 
 use Components\Options as Options;
 

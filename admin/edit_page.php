@@ -13,7 +13,10 @@ class EditorPage extends ComponentizerAdmin {
     // Load up options
     $this->options = Options\get_options();
     $this->location_orders = get_option('componentizer_location_orders');
-    
+
+    // If no config file, die.
+    if ($this->options == null) return;
+
     // Add metaboxes to the appropriate post types
     $post_types = get_post_types();
     $post_types = array_diff($post_types, $this->options['exclude_order_for_post_types']);

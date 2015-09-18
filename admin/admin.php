@@ -27,7 +27,7 @@ class ComponentizerAdmin {
   }
   // If not, show a warning
   function require_acf() {
-    echo '<div class="error"><p>'.__('Error: Advanced Custom Fields must be active.', 'sage').'</p></div>';
+    echo '<div class="error"><p>'.__('Error: Advanced Custom Fields must be active.', 'componentizer').'</p></div>';
   }
 
   // Enqueue styles and scripts

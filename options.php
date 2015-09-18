@@ -2,8 +2,20 @@
 
 namespace Components\Options;
 
+function add_componentizer_role() {
+   add_role( 'edit_componentizer_options', __('Componentizer Options','componentizer'), array( 'level_10' => true ) );
+}
+register_activation_hook( __FILE__, 'add_componentizer_role' );
+
+function config_missing() {
+  echo '<div class="error"><p>'.__('<strong>Error:</strong> Missing <code>config.php</code> file found for Componentizer found in <code>'.get_stylesheet_directory().'/componentizer/</code>. Copy and rename <code>componentizer/config-sample.php</code> to get started.', 'componentizer').'</p></div>';
+}
+
 if (!$filepath = locate_template('componentizer/config.php')) {
-  trigger_error(sprintf(__('Error locating %s for inclusion', 'componentizer'), $file), E_USER_ERROR);
+  // trigger_error(sprintf(__('Error locating %s for inclusion', 'componentizer'), $file), E_USER_ERROR);
+  add_action( 'admin_notices', __NAMESPACE__ . '\config_missing' );
+  define(__NAMESPACE__ . '\COMPONENT_PATH','');
+  return;
 }
 require_once $filepath;
 unset($filepath);
@@ -27,7 +39,4 @@ function get_options($key = false) {
     return $options;
   }
 }
- function add_componentizer_role() {
-     add_role( 'edit_componentizer_options', __('Componentizer Options','componentizer'), array( 'level_10' => true ) );
- }
- register_activation_hook( __FILE__, 'add_componentizer_role' );
+

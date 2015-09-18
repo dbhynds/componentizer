@@ -12,6 +12,7 @@ class SettingsPage extends ComponentizerAdmin {
   function __construct() {
     // Load up options
     $this->options = Options\get_options();
+    $this->location_orders = get_option('componentizer_location_orders');
     // Add the reference page to the admin menu
     add_action( 'admin_menu', array($this,'add_menu_page'), 20 );
     // Register Settings
@@ -21,8 +22,7 @@ class SettingsPage extends ComponentizerAdmin {
 
   // Add reference page to the Appearance menu
   function add_menu_page() {
-    add_options_page(__('Componentizer','componentizer'), __('Componentizer','componentizer'), 'manage_options', 'componentizer', array($this,'assign_components_to_templates') );
-    // add_submenu_page('edit.php?post_type=acf', __('Componentizer','componentizer'), __('Componentizer','componentizer'), 'manage_options', 'componentizer', array($this,'assign_components_to_templates') );
+    add_theme_page( __('Componentizer','componentizer'), __('Componentizer','componentizer'), 'manage_options', 'componentizer', array($this,'assign_components_to_templates') );
   }
   function register_settings() {
     $this->component_templates = $this->get_component_templates();
@@ -186,7 +186,9 @@ class SettingsPage extends ComponentizerAdmin {
     } else {
       $top_fields = $bottom_fields = array();
     }
+
     $fields = get_option( 'componentizer_fields' );
+
     $new_bottom_fields = $new_top_fields = array();
     foreach ($fields as $field_id => $field) {
       $field_id = (string)$field_id;

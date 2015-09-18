@@ -24,6 +24,8 @@ function build($components = false, $suffixes = null) {
     // Set the base components to load as determined by the $component_ids
     if ($component_ids) {
       $top_components = $sortable_components = $bottom_components = array();
+      if (!array_key_exists('top', $location_orders)) $location_orders['top'] = array();
+      if (!array_key_exists('bottom', $location_orders)) $location_orders['bottom'] = array();
 
       foreach ($location_orders['top'] as $value) {
         $component = array_search($value, $component_ids);

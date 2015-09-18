@@ -53,7 +53,7 @@ All primary and secondary templates (dark and light blue in the above images) wi
 Create Advanced Custom Field groups to associate with component files. Each base component should have a field group associated with it. Multiple field groups can be created for the same component. However field groups variations should use identically `Field Names` (although labels can vary). Fields can be added or removed from variations.
 
 ### Associate Groups and Components
-Once field groups and component files have been created, navigate to "Settings > Componentizer" in the WordPress admin. Assign each field group to a base component. Assign it a location if field groups should appear at the top or bottom of a page and not be sortable by the authors.
+Once field groups and component files have been created, navigate to "Appearance > Componentizer" in the WordPress admin. Assign each field group to a base component. Assign it a location if field groups should appear at the top or bottom of a page and not be sortable by the authors.
 
 After saving locations for field groups, reorder the top and bottom sections under "Location Orders". **Important: After changing the location of a field from sortable to top or bottom, the order must be resaved in order to go into effect. If you change a field group to top or bottom, save the page twice.**
 
@@ -95,7 +95,7 @@ $custom_order = array(
 Components\build($custom_order);
 ```
 
-To view available component slugs, go to "Settings > Componentizer" and look at the section labelled "Component Files"
+To view available component slugs, go to "Appearance > Componentizer" and look at the section labelled "Component Files"
 
 ### Specify a Custom Suffix
 Suffixes get appended to the base template to locate the appropriate component according to the template hierarchy. However, a custom suffix(es) can be designated.

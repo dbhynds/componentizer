@@ -29,7 +29,7 @@ class EditorPage extends ComponentizerAdmin {
   
   // Add the component order metabox to the editor page
   function add_component_order_box() {
-    add_meta_box( 'mb_component_field_order', 'Component Order', array($this,'component_order_box'), null, 'side', 'high' );
+    add_meta_box( 'mb_component_field_order', __('Component Order','componentizer'), array($this,'component_order_box'), null, 'side', 'high' );
   }
   function component_order_box($post) {
     // Add a nonce

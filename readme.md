@@ -124,7 +124,7 @@ Fields on the page reflect the order in the sidebar.
 
 ## Additional Information
 
-### Version: 0.6.4
+### Version: 0.7.0
 
 ### Minimum Requirements
 

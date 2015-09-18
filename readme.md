@@ -1,13 +1,18 @@
 # Componentizer
 
+1. [Installation](#installation)
+1. [Advanced Configuration](#advanced-configuration)
+1. [Feature Requests](#feature-requests)
+1. [Additional Information](#additional-information)
+
 ## Installation
 
-1. Install Componentizer
-1. Configure Componentizer
-1. Create Components
-1. Create Advanced Custom Field Groups
-1. Associate Groups and Components
-1. Update Theme Files
+1. [Install Componentizer](#install-componentizer)
+1. [Configure Componentizer](#configure-componentizer)
+1. [Create Components](#create-components)
+1. [Create Field Groups](#create-field-groups)
+1. [Associate Groups and Components](#associate-groups-and-components)
+1. [Update Theme Files](#update-theme-files)
 
 ### Install Componentizer
 1. Install and enable the Advanced Custom Fields plugin.
@@ -20,7 +25,7 @@
 ### Configure Componentizer
 Componentizer allows you to configure several variables in `config.php`. For help configuring Componentizer for your site, navigate to the Compontentizer page under Appearance
 #### $component\_path
-The component path is the relative path in your theme where component template files are located. In step 4 of the install, we set this to `components`. However, you can move or rename or move as long as it's located within your theme.
+The component path is the relative path in your theme where component template files are located. In step 4 of the install, we set this to `components`. However, you can move or rename it as long as it's located within your theme.
 #### $persistant\_fields
 These are fields that appear in the back and front end but aren't ACF field groups. WordPress' content editor is included by default, but others can be added or removed if desired.
 #### $exclude_order\_for\_post\_types
@@ -105,7 +110,10 @@ Components\build(false,$suffix);
 Specify a collection of custom suffixes:
 
 ```
-$suffixes = array('extra-special','special');
+$suffixes = array(
+	'extra-special',
+	'special'
+);
 Components\build(false,$suffixes);
 ```
 
@@ -115,4 +123,10 @@ Note: `false` should be passed as the first argument in order to not override th
 Fields on the page reflect the order in the sidebar.
 
 ## Additional Information
-**Version:** 0.6.4
+
+### Version: 0.6.4
+
+### Minimum Requirements
+
+* PHP >= 5.3.10
+* WordPress >= 3.4.0

@@ -166,8 +166,9 @@ class EditorPage extends ComponentizerAdmin {
     }
 
     $location_orders = get_option('componentizer_location_orders');
-    $this->options['top_components'] = $location_orders['top'];
-    $this->options['bottom_components'] = $location_orders['bottom'];
+    
+    $this->options['top_components'] = (array_key_exists('top', $location_orders)) ? $location_orders['top'] : array();
+    $this->options['bottom_components'] = (array_key_exists('bottom', $location_orders)) ? $location_orders['bottom'] : array();
     // Sort the top and bottom according to the order specified in the config file
     usort($fields_top, array($this,'sort_top'));
     usort($fields_bottom, array($this,'sort_bottom'));

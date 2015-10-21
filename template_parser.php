@@ -4,8 +4,6 @@
  * Configuration
  */
 
-// Relative to the theme's directory
-$html_template_path = 'html_components';
 /**
  * Usage
  * Include the following code in your php file:
@@ -14,12 +12,22 @@ $html_template_path = 'html_components';
  *   
  */
 
-/**
- * That's all.
- */
+if (TEMPLATE_PATH === false) return;
 
-// Set the directory where the templates will live as a constant
-define(__NAMESPACE__ . '\DIR',get_stylesheet_directory().'/'.$html_template_path);
+function template_missing() {
+  echo '<div class="update-nag"><p>';
+    _e('<strong>Warning:</strong> An invalid path was specified for the HTML Template Parser. ', 'componentizer');
+    _e('The path is currently set to: ', 'componentizer');
+    var_dump(TEMPLATE_PATH);
+    _e('. ', 'componentizer');
+    _e('To use the template parser, proved a valid path relative to the current theme directory.', 'componentizer');
+  echo '</p></div>';
+}
+
+if (!file_exists(TEMPLATE_PATH)) {
+  add_action( 'admin_notices', __NAMESPACE__ . '\template_missing' );
+  return;
+}
 
 /**
  * Scrape the directory for the defined file types.
@@ -30,10 +38,10 @@ function register_files( $file_types = false ) {
     if (!$file_types) {
       $file_types = array('svg','html','kit');
     }
-    $files = scandir(DIR);
+    $files = scandir(TEMPLATE_PATH);
     $db_entry = array();
     if ($files) foreach ($files as $file) {
-      $file = DIR.'/'.$file;
+      $file = TEMPLATE_PATH.'/'.$file;
       $file_ext = pathinfo($file, PATHINFO_EXTENSION);
 
       if (in_array($file_ext, $file_types)==1) {

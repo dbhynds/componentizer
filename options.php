@@ -19,7 +19,9 @@ if (!$filepath = locate_template('componentizer/config.php')) {
 }
 require_once $filepath;
 unset($filepath);
-define(__NAMESPACE__ . '\COMPONENT_PATH',$component_path);
+define(__NAMESPACE__ . '\COMPONENT_PATH', $component_path);
+$template_path = ($html_template_path) ? get_stylesheet_directory().'/'.$html_template_path : false;
+define('Templates\\TEMPLATE_PATH', $template_path);
 
 // Set the above configuration options to an associative array for easy retrieval later
 $options = array(

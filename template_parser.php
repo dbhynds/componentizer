@@ -17,9 +17,9 @@ if (TEMPLATE_PATH === false) return;
 function template_missing() {
   echo '<div class="update-nag"><p>';
     _e('<strong>Warning:</strong> An invalid path was specified for the HTML Template Parser. ', 'componentizer');
-    _e('The path is currently set to: ', 'componentizer');
+    _e('The path is currently set to: <code>', 'componentizer');
     var_dump(TEMPLATE_PATH);
-    _e('. ', 'componentizer');
+    _e('</code>. ', 'componentizer');
     _e('To use the template parser, proved a valid path relative to the current theme directory.', 'componentizer');
   echo '</p></div>';
 }

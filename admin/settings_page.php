@@ -53,7 +53,7 @@ class SettingsPage extends ComponentizerAdmin {
     // var_dump($options);
     // List all ACF Field Groups and their associated base components
     $acf_fields = get_posts([
-      'post_type' => 'acf',
+      'post_type' => 'acf-field-group',
       'posts_per_page' => -1,
       'order' => 'ASC',
       'orderby' => 'title',
@@ -250,7 +250,7 @@ class SettingsPage extends ComponentizerAdmin {
     // var_dump($options);
     // List all ACF Field Groups and their associated base components
     $acf_fields = get_posts([
-      'post_type' => 'acf',
+      'post_type' => 'acf-field-group',
       'posts_per_page' => -1,
       'order' => 'ASC',
       'orderby' => 'title',
@@ -294,7 +294,7 @@ class SettingsPage extends ComponentizerAdmin {
 
       // List the base components and their subsidiary files
       echo '<h2>'.__('Component Files','componentizer').'</h2>';
-      echo '<p>'.__('These files are located in the','componentizer').' <code>'.Options\COMPONENT_PATH.'</code> '.__('directory of your theme.','componentizer').'</p>';
+      echo '<p>'.__('These files are located in the <code>'.Options\COMPONENT_PATH.'</code> directory of your theme.','componentizer').'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>

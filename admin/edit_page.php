@@ -17,19 +17,23 @@ class EditorPage extends ComponentizerAdmin {
     // If no config file, die.
     if ($this->options == null) return;
 
+    add_action('init',array($this,'setup_edit_page'));
+
+  }
+
+  function setup_edit_page() {
     // Add metaboxes to the appropriate post types
-    $post_types = get_post_types();
+    $post_types = get_post_types(array('public' => true));
     $post_types = array_diff($post_types, $this->options['exclude_order_for_post_types']);
     foreach ($post_types as $post_type) {
       add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_order_box') );
     }
     add_action( 'save_post', array($this,'component_order_save_meta_box_data') );
-
   }
   
   // Add the component order metabox to the editor page
   function add_component_order_box() {
-    add_meta_box( 'mb_component_field_order', __('Component Order','componentizer'), array($this,'component_order_box'), null, 'side', 'high' );
+    add_meta_box( 'mb_component_field_order', 'Component Order', array($this,'component_order_box'), null, 'side', 'high' );
   }
   function component_order_box($post) {
     // Add a nonce
@@ -76,7 +80,10 @@ class EditorPage extends ComponentizerAdmin {
     // Get the metabox IDs of ACF field groups on this page
     $filter = array( 'post_id' => $post->ID );
     $metabox_ids = array();
-    $metabox_ids = apply_filters( 'acf/location/match_field_groups', null, $filter );
+    $groups = acf_get_field_groups($filter);
+    foreach ($groups as $group) {
+      array_push($metabox_ids, $group['ID']);
+    }
     
     // Include persistent fields and ACF field groups
     // We'll iterate through the various fields and unset them here if they exist.
@@ -115,11 +122,10 @@ class EditorPage extends ComponentizerAdmin {
         }
       }
     }
-    // var_dump($metabox_ids);
   
     // Sort all of the ACF fields into top, middle, and bottom.
     if (count($all_fields)) {
-      $acf_field_posts = get_posts(array('post__in' => $all_fields,'post_type' => 'acf'));
+      $acf_field_posts = get_posts(array('post__in' => $all_fields,'post_type' => 'acf-field-group'));
       foreach ($acf_field_posts as $acf_field_post) {
         // If this field exists, unset it in $all_fields
         $all_fields = array_diff($all_fields, array($acf_field_post->ID));
@@ -160,8 +166,8 @@ class EditorPage extends ComponentizerAdmin {
     }
 
     $location_orders = get_option('componentizer_location_orders');
-    $this->options['top_components'] = (array_key_exists('top', $location_orders)) ? $location_orders['top'] : array();
-    $this->options['bottom_components'] = (array_key_exists('bottom', $location_orders)) ? $location_orders['bottom'] : array();
+    $this->options['top_components'] = $location_orders['top'];
+    $this->options['bottom_components'] = $location_orders['bottom'];
     // Sort the top and bottom according to the order specified in the config file
     usort($fields_top, array($this,'sort_top'));
     usort($fields_bottom, array($this,'sort_bottom'));

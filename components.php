@@ -22,7 +22,7 @@ function build($components = false, $suffixes = null) {
     $components = array();
     $component_ids = get_post_meta( $post->ID, '_field_order', true );
     // Set the base components to load as determined by the $component_ids
-    if ($component_ids) {
+    if ($component_ids !== false) {
       $top_components = $sortable_components = $bottom_components = array();
       if (!array_key_exists('top', $location_orders)) $location_orders['top'] = array();
       if (!array_key_exists('bottom', $location_orders)) $location_orders['bottom'] = array();
@@ -44,7 +44,6 @@ function build($components = false, $suffixes = null) {
         unset($component);
       }
       $ordered_component_ids = array_merge($top_components,$component_ids,$bottom_components);
-
       foreach ($ordered_component_ids as $component_id) {
         if (array_key_exists($component_id,$component_fields)) {
           if (is_singular() || in_array($component_id,$visible_on_archive)) {
@@ -54,19 +53,39 @@ function build($components = false, $suffixes = null) {
       }
     }
   }
-  
+  if (is_string($components)) $components = array($components);
+  // var_dump($components);
   // Get the list of suffixes to try and load
   $suffixes = get_suffixes($suffixes);
-  
+  // var_dump($suffixes);
   // Locate the approriate component files and load them
   if ($components) foreach ($components as $component) {
-    $templates = array(Options\COMPONENT_PATH.'/'.$component.'.php');
+    $templates = array();
     foreach ($suffixes as $suffix) {
       array_push($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
     }
+    array_push($templates, Options\COMPONENT_PATH.'/'.$component.'.php');
     $file = locate_template($templates,false,false);
     if ($file) include($file);
   }
+}
+
+/**
+ * Build a component by passing content to it
+ * @param  mixed $component_content Required. A string or array of content to be used by the component.
+ * @param  string $component        Required. The base component to build with.
+ * @param  mixed $suffixes          Optional. A string or array or suffixes which should override the template priority
+ */
+function build_with($content, $component, $suffixes = null) {
+  // Get the list of suffixes to try and load
+  $suffixes = get_suffixes($suffixes);
+  
+  $templates = array(Options\COMPONENT_PATH.'/'.$component.'.php');
+  foreach ($suffixes as $suffix) {
+    array_push($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
+  }
+  $file = locate_template($templates,false,false);
+  if ($file) include($file);
 }
 
 /**

@@ -21,7 +21,6 @@ require_once $filepath;
 unset($filepath);
 define(__NAMESPACE__ . '\COMPONENT_PATH',$component_path);
 
-
 $fields = [];
 foreach ($persistant_fields as $field) {
   $fields[$field] = null;
@@ -35,6 +34,12 @@ $options = array(
   'exclude_order_for_post_types' => $exclude_order_for_post_types, // Array of post types that should not have the Field Order metabox
   'persistant_fields' => $persistant_fields,
 );
+
+add_action('admin_init',__NAMESPACE__.'\\check_for_pro');
+function check_for_pro() {
+  $uses_pro = \is_plugin_active('advanced-custom-fields-pro/acf.php');
+  define(__NAMESPACE__ . '\\USES_PRO',$uses_pro);
+}
 /**
  * Returns either the requested option or an array of all of the options
  * @param  string $key Array key of the option to get

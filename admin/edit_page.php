@@ -75,11 +75,19 @@ class EditorPage extends ComponentizerAdmin {
     $current_fields = $fields_top = $fields_middle = $fields_bottom = $fields = array();
 
     // Get the ACF field groups on this page
-    $all_field_groups = acf_get_field_groups();
-    $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post->ID));
+    if (Options\USES_PRO) {
+      $all_field_groups = acf_get_field_groups();
+      $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post->ID));
+    } else {
+      $filter = array( 'post_id' => $post->ID );
+      $filtered_field_groups = array();
+      $filtered_field_groups = apply_filters( 'acf/location/match_field_groups', null, $filter );
+      // var_dump($filtered_field_groups);
+    }
     $field_groups = [];
     foreach ($filtered_field_groups as $filtered_field_group) {
-      array_push($field_groups, $filtered_field_group['ID']);
+      $field_id = (Options\USES_PRO) ? $filtered_field_group['ID'] : $filtered_field_group;
+      array_push($field_groups, $field_id);
     }
     // Include persistent fields and ACF field groups
     // We'll iterate through the various fields and unset them here if they exist.
@@ -119,6 +127,7 @@ class EditorPage extends ComponentizerAdmin {
       }
     }
 
+    // var_dump($options);
     // Now, if there are any remaining fields, sort them into the correct buckets
     foreach ($all_fields as $all_field) {
       // Unset it in $all_fields

@@ -52,8 +52,14 @@ class SettingsPage extends ComponentizerAdmin {
     $options = get_option( 'componentizer_fields' );
     // var_dump($options);
     // List all ACF Field Groups and their associated base components
+    
+    if (Options\USES_PRO) {
+      $post_type_name = 'acf-field-group';
+    } else {
+      $post_type_name = 'acf';
+    }
     $acf_fields = get_posts([
-      'post_type' => 'acf-field-group',
+      'post_type' => $post_type_name,
       'posts_per_page' => -1,
       'order' => 'ASC',
       'orderby' => 'title',

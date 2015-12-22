@@ -21,7 +21,7 @@ class ComponentizerAdmin {
 
   // Make sure ACF is enabled
   function check_for_acf() {
-    if (!is_plugin_active('advanced-custom-fields/acf.php') && !is_plugin_active('advanced-custom-fields-pro/acf.php')) {
+    if (!is_plugin_active('advanced-custom-fields/acf.php') && !is_plugin_active('advanced-custom-fields-pro/acf.php') ) {
       add_action( 'admin_notices', array($this,'require_acf') );
     }
   }

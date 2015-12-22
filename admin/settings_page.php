@@ -87,10 +87,14 @@ class SettingsPage extends ComponentizerAdmin {
         $template .= '</select>';
         
         $in_top = $in_sortable = $in_bottom = null;
-        if ($options[$field_id]['location'] == 'top') {
-          $in_top = 'checked';
-        } elseif ($options[$field_id]['location'] == 'bottom') {
-          $in_bottom = 'checked';
+        if (array_key_exists($field_id, $options)) {
+          if ($options[$field_id]['location'] == 'top') {
+            $in_top = 'checked';
+          } elseif ($options[$field_id]['location'] == 'bottom') {
+            $in_bottom = 'checked';
+          } else {
+            $in_sortable = 'checked';
+          }
         } else {
           $in_sortable = 'checked';
         }
@@ -136,15 +140,14 @@ class SettingsPage extends ComponentizerAdmin {
       foreach ($persistant_fields as $persistant_field) {
         $field_id = $persistant_field;
         $template = '<select name="componentizer_fields['.$field_id.'][template]">';
-        $template .= '<option>-- '.__('None','componentizer').' --</option>';
+        $template .= '<option value="">-- '.__('None','componentizer').' --</option>';
         $selected = $row_class = null;
         foreach ($this->component_templates as $base_component => $value) {
-          if (isset($options[$field_id]['template'])) {
+          if (isset($options[$field_id]['template']) && $options[$field_id]['template']) {
             $selected = ($options[$field_id]['template'] == $base_component) ? 'selected' : null;
           } else {
             $row_class = 'no-component';
           }
-          
           $template .= '<option '.$selected.'>'.$base_component.'</option>';
         }
         $template .= '</select>';
@@ -246,11 +249,10 @@ class SettingsPage extends ComponentizerAdmin {
 
   function assign_visible_on_archive() {
     $options = get_option( 'componentizer_visible_on_archive' );
-    if ($options === false) $options = array();
-    // var_dump($options);
+    if (!$options) $options = array();
     // List all ACF Field Groups and their associated base components
     $acf_fields = get_posts([
-      'post_type' => 'acf-field-group',
+      'post_type' => 'acf',
       'posts_per_page' => -1,
       'order' => 'ASC',
       'orderby' => 'title',
@@ -294,7 +296,7 @@ class SettingsPage extends ComponentizerAdmin {
 
       // List the base components and their subsidiary files
       echo '<h2>'.__('Component Files','componentizer').'</h2>';
-      echo '<p>'.__('These files are located in the <code>'.Options\COMPONENT_PATH.'</code> directory of your theme.','componentizer').'</p>';
+      echo '<p>'.__('These files are located in the','componentizer').' <code>'.Options\COMPONENT_PATH.'</code> '.__('directory of your theme.','componentizer').'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>

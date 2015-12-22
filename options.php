@@ -19,11 +19,16 @@ if (!$filepath = locate_template('componentizer/config.php')) {
 }
 require_once $filepath;
 unset($filepath);
-define(__NAMESPACE__ . '\COMPONENT_PATH', $component_path);
+define(__NAMESPACE__ . '\COMPONENT_PATH',$component_path);
 
-// Set the HTML Template Path
-$template_path = ($html_template_path) ? get_stylesheet_directory().'/'.$html_template_path : false;
-define('Templates\\TEMPLATE_PATH', $template_path);
+
+$fields = [];
+foreach ($persistant_fields as $field) {
+  $fields[$field] = null;
+}
+add_option('componentizer_fields', $fields);
+add_option('componentizer_visible_on_archive',[]);
+add_option('componentizer_location_orders',['top'=>[],'bottom'=>[]]);
 
 // Set the above configuration options to an associative array for easy retrieval later
 $options = array(

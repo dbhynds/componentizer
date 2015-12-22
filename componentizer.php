@@ -7,7 +7,6 @@ $componenentizer_includes = array(
   'componentizer/admin/admin.php',
   'componentizer/admin/settings_page.php',
   'componentizer/admin/edit_page.php',
-  'componentizer/template_parser.php',
 );
 
 foreach ($componenentizer_includes as $file) {

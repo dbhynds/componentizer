@@ -19,7 +19,7 @@ if (!$filepath = locate_template('componentizer/config.php')) {
 }
 require_once $filepath;
 unset($filepath);
-define(__NAMESPACE__ . '\COMPONENT_PATH',$component_path);
+define(__NAMESPACE__ . '\COMPONENT_PATH',$controllers_path);
 
 $fields = [];
 foreach ($persistant_fields as $field) {

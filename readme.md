@@ -5,6 +5,12 @@
 1. [Feature Requests](#feature-requests)
 1. [Additional Information](#additional-information)
 
+## Requirements
+
+* PHP >= 5.4
+* WordPress >= 3.4.0
+* Advanced Custom Fields Pro Plugin >= 5.3.3.2
+
 ## Installation
 
 1. [Install Componentizer](#install-componentizer)
@@ -15,7 +21,7 @@
 1. [Update Theme Files](#update-theme-files)
 
 ### Install Componentizer
-1. Install and enable the Advanced Custom Fields plugin.
+1. Install and enable the Advanced Custom Fields Pro plugin.
 1. Clone Componetizer into your theme directory.
 1. Navigate to the newly created `componentizer` directory.
 1. Rename `config-sample.php` to `config.php`.
@@ -120,13 +126,9 @@ Components\build(false,$suffixes);
 Note: `false` should be passed as the first argument in order to not override the user-specified component order.
 
 ## Feature Requests
-Fields on the page reflect the order in the sidebar.
+
+* Fields on the page reflect the order in the sidebar.
 
 ## Additional Information
 
-### Version: 0.9
-
-### Minimum Requirements
-
-* PHP >= 5.3.10
-* WordPress >= 3.4.0
+### Version: 1.0

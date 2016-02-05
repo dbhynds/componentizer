@@ -16,4 +16,4 @@ $persistant_fields = array('content');
 $exclude_order_for_post_types = array('nav_menu_item', 'revision', 'attachment');
 
 // Path the the Componentizer JSON directory relative to current theme directory
-$componentizer_json_path = 'componentizer-json';
+$componentizer_json_path = null;

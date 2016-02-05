@@ -62,7 +62,7 @@ function build($components = false, $suffixes = null) {
   if ($components) foreach ($components as $component) {
     $templates = array(Options\COMPONENT_PATH.'/'.$component.'.php');
     foreach ($suffixes as $suffix) {
-      array_push($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
+      array_unshift($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
     }
     $file = locate_template($templates,false,false);
     if ($file) include($file);
@@ -78,12 +78,11 @@ function build($components = false, $suffixes = null) {
 function build_with($context, $component, $suffixes = null) {
   // Get the list of suffixes to try and load
   $suffixes = get_suffixes($suffixes);
-
   $templates = array();
+  array_unshift($templates, Options\COMPONENT_PATH.'/'.$component.'.php');
   foreach ($suffixes as $suffix) {
-    array_push($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
+    array_unshift($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');
   }
-  array_push($templates, Options\COMPONENT_PATH.'/'.$component.'.php');
   $file = locate_template($templates,false,false);
   if ($file) include($file);
 }

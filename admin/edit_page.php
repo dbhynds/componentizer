@@ -19,6 +19,13 @@ class EditorPage extends ComponentizerAdmin {
     if ($this->options == null) return;
 
     // Add metaboxes to the appropriate post types
+    add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
+
+  }
+
+  function add_metaboxes_to_posts() {
+
+    // Add metaboxes to the appropriate post types
     $post_types = get_post_types();
     $post_types = array_diff($post_types, $this->options['exclude_order_for_post_types']);
     foreach ($post_types as $post_type) {
@@ -75,27 +82,20 @@ class EditorPage extends ComponentizerAdmin {
     $current_fields = $fields_top = $fields_middle = $fields_bottom = $fields = array();
 
     // Get the ACF field groups on this page
+    $all_field_groups = acf_get_field_groups();
+    $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post->ID));
     $field_groups = [];
-    if (Options\USES_PRO) {
-      $all_field_groups = acf_get_field_groups();
-      $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post->ID));
-      foreach ($filtered_field_groups as $filtered_field_group) {
-        array_push($field_groups, $filtered_field_group['ID']);
-      }
-    } else {
-      $filter = array( 'post_id' => $post->ID );
-      $filtered_field_groups = array();
-      $filtered_field_groups = apply_filters( 'acf/location/match_field_groups', null, $filter );
-      foreach ($filtered_field_groups as $filtered_field_group) {
-        array_push($field_groups, $filtered_field_group);
-      }
+    foreach ($filtered_field_groups as $filtered_field_group) {
+      array_push($field_groups, $filtered_field_group['ID']);
     }
     // Include persistent fields and ACF field groups
     // We'll iterate through the various fields and unset them here if they exist.
     $all_fields = array_merge($field_groups,$this->options['persistant_fields']);
+    // var_dump($all_fields);
 
     // Get the saved order, if any.
     $field_ids = get_post_meta( $post->ID, '_field_order', true );
+    // var_dump($field_ids);
 
     // If there is a saved order, sort the fields into top, middle, or bottom
     
@@ -113,7 +113,6 @@ class EditorPage extends ComponentizerAdmin {
               'name' => $field_title,
             );
           // Add it to the appropriate section
-          
           if ($options[$field_id]['location'] == 'top') {
             array_push($fields_top,$field_args);
           } elseif ($options[$field_id]['location'] == 'bottom') {

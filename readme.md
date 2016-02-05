@@ -50,7 +50,7 @@ All primary and secondary templates (dark and light blue in the above images) wi
 * custom taxonomies
 
 ### Create Field Groups
-Create Advanced Custom Field groups to associate with component files. Each base component should have a field group associated with it. Multiple field groups can be created for the same component. However field groups variations should use identically `Field Names` (although labels can vary). Fields can be added or removed from variations.
+Create Advanced Custom Field groups to associate with component files. Each base component should have a field group associated with it. Multiple field groups can be created for the same component. However field groups variations should use identical `Field Names` (although labels can vary). Fields can be added or removed from variations.
 
 ### Associate Groups and Components
 Once field groups and component files have been created, navigate to "Appearance > Componentizer" in the WordPress admin. Assign each field group to a base component. Assign it a location if field groups should appear at the top or bottom of a page and not be sortable by the authors.

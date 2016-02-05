@@ -36,6 +36,7 @@ class ComponentizerAdmin {
 
   // Check if settings need to be synced
   function check_for_sync() {
+    if ( !Options\JSON_PATH ) return false;
     $json_times_db = get_option('componentizer_json_timestamps');
     $json_times_files = $this::get_json_file_timestamps();
     return ($json_times_db !== $json_times_files);

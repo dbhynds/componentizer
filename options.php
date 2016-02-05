@@ -23,6 +23,8 @@ define(__NAMESPACE__ . '\COMPONENT_PATH',$controllers_path);
 
 if ($componentizer_json_path && file_exists(get_stylesheet_directory().'/'.$componentizer_json_path)) {
   define(__NAMESPACE__ . '\JSON_PATH',get_stylesheet_directory().'/'.$componentizer_json_path);
+} else {
+  define(__NAMESPACE__ . '\JSON_PATH', false);
 }
 
 

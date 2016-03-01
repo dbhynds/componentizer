@@ -7,7 +7,7 @@
  */
 
 // Path to component directory relative to current theme directory
-$controllers_path = 'controllers';
+$component_path = 'controllers';
 
 // Fields that aren't from ACF but should still be included.
 $persistant_fields = array('content');

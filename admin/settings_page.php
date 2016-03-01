@@ -4,37 +4,38 @@ namespace Components\Admin;
 
 use Components\Options as Options;
 
+
 // Don't bother on the front end or non-admins
-if (!is_admin() && !current_user_can('edit_componentizer_options')) return;
+if (!is_admin()) return;
 
 class SettingsPage extends ComponentizerAdmin {
 
   function __construct() {
     // Load up options
-    $this->options = Options\get_options();
     $this->location_orders = get_option('componentizer_location_orders');
     // Add the reference page to the admin menu
     add_action( 'admin_menu', [$this,'add_menu_page'] );
     // Register settings
     add_action( 'admin_init', [$this,'register_settings'] );
     // Sync ajax
-    add_action( 'wp_ajax_sync', [$this,'ajax_sync_callback'] );
+    // add_action( 'wp_ajax_sync', [$this,'ajax_sync_callback'] );
+    // Sync ajax
+    // add_action( 'wp_ajax_update_to_group_name', [$this,'ajax_update_to_group_name_callback'] );
   }
 
   // Add reference page to the Appearance menu
   function add_menu_page() {
-    // add_theme_page( __('Componentizer','componentizer'), __('Componentizer','componentizer'), 'manage_options', 'componentizer', array($this,'assign_components_to_templates') );
-    
     $slug = 'componentizer';
     $cap = 'manage_options';
     // add parent
-    add_menu_page(__("Componentizer",'acf'), __("Componentizer",'acf'), $cap, $slug, false, 'dashicons-layout', 60, array($this,'assign_components_to_templates'));
+    add_menu_page(__("Componentizer",$this::NS), __("Componentizer",$this::NS), $cap, $slug, false, 'dashicons-layout', 60, array($this,'assign_components_to_templates'));
     
     // add children
-    add_submenu_page($slug, __('Field Groups','acf'), __('Field Groups','acf'), $cap, $slug, array($this,'assign_components_to_templates') );
-    add_submenu_page($slug, __('Location Orders','acf'), __('Location Orders','acf'), $cap, 'location-orders', array($this,'assign_components_location_orders') );
-    add_submenu_page($slug, __('Visible on Archive Pages','acf'), __('Visible on Archive','acf'), $cap, 'visible-on-archive', array($this,'assign_components_visible_on_archive') );
-    if (Options\JSON_PATH) add_submenu_page($slug, __('Sync Configuration','acf'), __('Sync Configuration','acf'), $cap, 'sync-configuration', array($this,'assign_options_for_sync') );
+    add_submenu_page($slug, __('Field Groups',$this::NS), __('Field Groups',$this::NS), $cap, $slug, array($this,'assign_components_to_templates') );
+    add_submenu_page($slug, __('Location Orders',$this::NS), __('Location Orders',$this::NS), $cap, 'location-orders', array($this,'assign_components_location_orders') );
+    add_submenu_page($slug, __('Visible on Archive Pages',$this::NS), __('Visible on Archive',$this::NS), $cap, 'visible-on-archive', array($this,'assign_components_visible_on_archive') );
+    add_submenu_page($slug, __('Settings',$this::NS), __('Settings',$this::NS), $cap, 'settings', array($this,'assign_components_advanced_settings') );
+    // if (Options\JSON_PATH) add_submenu_page($slug, __('Sync Configuration',$this::NS), __('Sync Configuration',$this::NS), $cap, 'sync-configuration', array($this,'assign_options_for_sync') );
     
   }
   function register_settings() {
@@ -43,13 +44,14 @@ class SettingsPage extends ComponentizerAdmin {
     add_filter( 'update_option_componentizer_fields', array($this, 'fields_updated') );
     add_filter( 'update_option_componentizer_location_orders', array($this, 'location_orders_updated') );
     add_filter( 'update_option_componentizer_visible_on_archive', array($this, 'visible_on_archive_updated') );
+    add_filter( 'update_option_componentizer_advanced_settings', array($this, 'advanced_settings_updated') );
 
     $this->component_templates = $this->get_component_templates();
 
     register_setting( 'componentizerSettings', 'componentizer_fields' );
     add_settings_section(
       'componentizer_fields',
-      __( 'Field Groups', 'componentizer' ),
+      __( 'Field Groups', $this::NS ),
       array($this,'assign_field_groups'),
       'componentizerSettings'
     );
@@ -57,7 +59,7 @@ class SettingsPage extends ComponentizerAdmin {
     register_setting( 'componentizerLocationSettings', 'componentizer_location_orders' );
     add_settings_section(
       'componentizer_location_orders',
-      __( 'Location Orders', 'componentizer' ),
+      __( 'Location Orders', $this::NS ),
       array($this,'assign_location_orders'),
       'componentizerLocationSettings'
     );
@@ -65,9 +67,17 @@ class SettingsPage extends ComponentizerAdmin {
     register_setting( 'componentizerArchiveSettings', 'componentizer_visible_on_archive' );
     add_settings_section(
       'componentizer_visible_on_archive',
-      __( 'Visible on Archive Pages', 'componentizer' ),
+      __( 'Visible on Archive Pages', $this::NS ),
       array($this,'assign_visible_on_archive'),
       'componentizerArchiveSettings'
+    );
+
+    register_setting( 'componentizerAdvancedSettings', 'componentizer_advanced_settings' );
+    add_settings_section(
+      'componentizer_advanced_settings',
+      __( 'Advanced Settings', $this::NS ),
+      array($this,'assign_advanced_settings'),
+      'componentizerAdvancedSettings'
     );
 
   }
@@ -75,25 +85,20 @@ class SettingsPage extends ComponentizerAdmin {
     $options = get_option( 'componentizer_fields' );
     // var_dump($options);
     // List all ACF Field Groups and their associated base components
-    $acf_fields = get_posts([
-      'post_type' => 'acf-field-group',
-      'posts_per_page' => -1,
-      'order' => 'ASC',
-      'orderby' => 'title',
-      ]);
-    echo '<h3>'.__('Advanced Custom Fields Groups','componentizer').'</h3>';
+    $acf_fields = $this->get_acfs();
+    echo '<h3>'.__('Advanced Custom Fields Groups',$this::NS).'</h3>';
     if ($acf_fields && count($acf_fields)) {
       echo '<table id="acf_field_groups" class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>
-          <th scope="col" id="title" class="manage-column column-title">'.__('Title','componentizer').'</th>
-          <th scope="col" id="base-component" class="manage-column column-base-component">'.__('Base Component','componentizer').'</th>
-          <th scope="col" id="location" class="manage-column column-location">'.__('Location','componentizer').'</th>
+          <th scope="col" id="title" class="manage-column column-title">'.__('Title',$this::NS).'</th>
+          <th scope="col" id="base-component" class="manage-column column-base-component">'.__('Base Component',$this::NS).'</th>
+          <th scope="col" id="location" class="manage-column column-location">'.__('Location',$this::NS).'</th>
         </tr>
       </thead>
       <tbody>';
       foreach ($acf_fields as $acf_field) {
-        $field_id = $acf_field->ID;
+        $field_id = $acf_field->post_name;
         $template = '<select name="componentizer_fields['.$field_id.'][template]">';
         $template .= '<option value="">-- '.__('None','componentizer').' --</option>';
         $selected = $row_class = null;
@@ -129,15 +134,15 @@ class SettingsPage extends ComponentizerAdmin {
         echo '<td>';
           echo '<label for="'.$field_id.'_top">';
             echo '<input type="radio" id="'.$field_id.'_top" name="componentizer_fields['.$field_id.'][location]" '.$in_top.' value="top">';
-            _e('Top','componentizer');
+            _e('Top',$this::NS);
           echo '</label> ';
           echo '<label for="'.$field_id.'_sortable">';
             echo '<input type="radio" id="'.$field_id.'_sortable" name="componentizer_fields['.$field_id.'][location]" '.$in_sortable.' value="sortable">';
-            _e('Sortable','componentizer');
+            _e('Sortable',$this::NS);
           echo '</label> ';
           echo '<label for="'.$field_id.'_bottom">';
             echo '<input type="radio" id="'.$field_id.'_bottom" name="componentizer_fields['.$field_id.'][location]" '.$in_bottom.' value="bottom">';
-            _e('Bottom','componentizer');
+            _e('Bottom',$this::NS);
           echo '</label> ';
         echo '</td>';
         echo '</tr>';
@@ -146,67 +151,12 @@ class SettingsPage extends ComponentizerAdmin {
       echo '</table>';
     }
 
-    echo '<h3>'.__('Persistant Fields Groups','componentizer').'</h3>';
-    $persistant_fields = $this->options['persistant_fields'];
-    if (count($persistant_fields)) {
-      echo '<table id="acf_field_groups" class="wp-list-table widefat fixed striped">';
-      echo '<thead>
-        <tr>
-          <th scope="col" id="id" class="manage-column column-id">'.__('ID','componentizer').'</th>
-          <th scope="col" id="base-component" class="manage-column column-base-component">'.__('Base Component','componentizer').'</th>
-          <th scope="col" id="location" class="manage-column column-location">'.__('Location','componentizer').'</th>
-        </tr>
-      </thead>
-      <tbody>';
-      foreach ($persistant_fields as $persistant_field) {
-        $field_id = $persistant_field;
-        $template = '<select name="componentizer_fields['.$field_id.'][template]">';
-        $template .= '<option value="">-- '.__('None','componentizer').' --</option>';
-        $selected = $row_class = null;
-        foreach ($this->component_templates as $base_component => $value) {
-          if (isset($options[$field_id]['template']) && $options[$field_id]['template']) {
-            $selected = ($options[$field_id]['template'] == $base_component) ? 'selected' : null;
-          } else {
-            $row_class = 'no-component';
-          }
-          $template .= '<option '.$selected.'>'.$base_component.'</option>';
-        }
-        $template .= '</select>';
-        $in_top = $in_sortable = $in_bottom = null;
-        if ($options[$field_id]['location'] == 'top') {
-          $in_top = 'checked';
-        } elseif ($options[$field_id]['location'] == 'bottom') {
-          $in_bottom = 'checked';
-        } else {
-          $in_sortable = 'checked';
-        }
-        echo '<tr class="'.$row_class.'">';
-        echo '<td>'.$field_id.'</td>';
-        echo '<td>'.$template.'</td>';
-        echo '<td>';
-          echo '<label for="'.$field_id.'_top">';
-            echo '<input type="radio" id="'.$field_id.'_top" name="componentizer_fields['.$field_id.'][location]" '.$in_top.' value="top">';
-            _e('Top','componentizer');
-          echo '</label> ';
-          echo '<label for="'.$field_id.'_sortable">';
-            echo '<input type="radio" id="'.$field_id.'_sortable" name="componentizer_fields['.$field_id.'][location]" '.$in_sortable.' value="sortable">';
-            _e('Sortable','componentizer');
-          echo '</label> ';
-          echo '<label for="'.$field_id.'_bottom">';
-            echo '<input type="radio" id="'.$field_id.'_bottom" name="componentizer_fields['.$field_id.'][location]" '.$in_bottom.' value="bottom">';
-            _e('Bottom','componentizer');
-          echo '</label> ';
-        echo '</tr>';
-      }
-      echo '</tbody>';
-      echo '</table>';
-    }
     submit_button();
   }
   function assign_location_orders() {
     if (is_array($this->location_orders)) {
-      $top_fields = (array_key_exists('top', $this->location_orders)) ? $this->location_orders['top'] : array();
-      $bottom_fields = (array_key_exists('bottom', $this->location_orders)) ? $this->location_orders['bottom'] : array();
+      $top_fields = (array_key_exists('top', $this->location_orders)) ? $this->location_orders['top'] : [];
+      $bottom_fields = (array_key_exists('bottom', $this->location_orders)) ? $this->location_orders['bottom'] : [];
     } else {
       $top_fields = $bottom_fields = array();
     }
@@ -233,11 +183,12 @@ class SettingsPage extends ComponentizerAdmin {
     $bottom_fields = array_unique($new_bottom_fields);
     
     echo '<div class="card">';
-      echo '<h3>'.__('Top Components','componentizer').'</h3>';
+      echo '<h3>'.__('Top Components',$this::NS).'</h3>';
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-top-components" class="order-components component-order-sort">';
       foreach ($top_fields as $top_field) {
-        $title = get_the_title($top_field);
+        $post = $this->get_acf_by_id($top_field);
+        $title = get_the_title($post);
         if (!$title) $title = ucwords($top_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[top][]" value="'.$top_field.'" checked style="display: none;" />';
@@ -249,12 +200,13 @@ class SettingsPage extends ComponentizerAdmin {
     echo '</div>';
 
     echo '<div class="card">';
-      echo '<h3>'.__('Bottom Components','componentizer').'</h3>';
+      echo '<h3>'.__('Bottom Components',$this::NS).'</h3>';
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-bottom-components" class="order-components component-order-sort">';
       foreach ($bottom_fields as $bottom_field) {
-        $title = get_the_title($bottom_field);
-        if (!$title) $title = ucwords($bottom_field);
+        $post = $this->get_acf_by_id($bottom_field);
+        $title = get_the_title($post);
+        if (!$title) $title = ucwords($top_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[bottom][]" value="'.$bottom_field.'" checked style="display: none;" />';
         echo '<span class="sortable ui-sortable-handle">'.$title.'</span>';
@@ -265,38 +217,21 @@ class SettingsPage extends ComponentizerAdmin {
     echo '</div>';
 
     submit_button();
-    
   }
 
   function assign_visible_on_archive() {
     $options = get_option( 'componentizer_visible_on_archive' );
-    if (!$options) $options = array();
+    if (!$options) $options = [];
     // List all ACF Field Groups and their associated base components
-    $acf_fields = get_posts([
-      'post_type' => 'acf-field-group',
-      'posts_per_page' => -1,
-      'order' => 'ASC',
-      'orderby' => 'title',
-      ]);
+    $acf_fields = $this->get_acfs();
     echo '<div id="visible-on-archive" class="card">';
     if ($acf_fields && count($acf_fields)) {
       foreach ($acf_fields as $acf_field) {
-        $checked = (in_array($acf_field->ID, $options)) ? 'checked' : null;
+        $checked = (in_array($acf_field->post_name, $options)) ? 'checked' : null;
         // var_dump($acf_field);
-        echo '<label for="'.$acf_field->ID.'">';
-          echo '<input type="checkbox" id="'.$acf_field->ID.'" name="componentizer_visible_on_archive[]" '.$checked.' value="'.$acf_field->ID.'">';
+        echo '<label for="'.$acf_field->post_name.'">';
+          echo '<input type="checkbox" id="'.$acf_field->post_name.'" name="componentizer_visible_on_archive[]" '.$checked.' value="'.$acf_field->post_name.'">';
           echo $acf_field->post_title;
-        echo '</label> ';
-      }
-    }
-    $persistant_fields = $this->options['persistant_fields'];
-    if ($persistant_fields && count($persistant_fields)) {
-      foreach ($persistant_fields as $persistant_field) {
-        // var_dump($persistant_field);
-        $checked = (in_array($persistant_field, $options)) ? 'checked' : null;
-        echo '<label for="'.$persistant_field.'">';
-          echo '<input type="checkbox" id="'.$persistant_field.'" name="componentizer_visible_on_archive[]" '.$checked.' value="'.$persistant_field.'">';
-          echo ucwords($persistant_field);
         echo '</label> ';
       }
     }
@@ -304,27 +239,26 @@ class SettingsPage extends ComponentizerAdmin {
     submit_button();
   }
 
-
   function assign_components_to_templates() {
     ?>
     <div id="componentizer-settings" class="wrap">
       <?php 
-      echo '<h1>'.__('Compontentizer','componentizer').'</h1>';
+      echo '<h1>'.__('Compontentizer',$this::NS).'</h1>';
       echo '<form id="basic" action="options.php" method="post" style="clear:both;">';
         settings_fields( 'componentizerSettings' );
         do_settings_sections( 'componentizerSettings' );
       echo '</form>';
 
       // List the base components and their subsidiary files
-      echo '<h2>'.__('Component Files','componentizer').'</h2>';
-      echo '<p>'.__('These files are located in the','componentizer').' <code>'.Options\COMPONENT_PATH.'</code> '.__('directory of your theme.','componentizer').'</p>';
+      echo '<h2>'.__('Component Files',$this::NS).'</h2>';
+      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.Options\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>
-          <th scope="col" id="base-components" class="manage-column column-base-components column-primary">'.__('Base Components','componentizer').'</th>
-          <th scope="col" id="suffixes" class="manage-column column-suffixes column-primary">'.__('Suffixes','componentizer').'</th>
-          <th scope="col" id="base-files" class="manage-column column-base-files column-primary">'.__('Base Files','componentizer').'</th>
-          <th scope="col" id="sub-files" class="manage-column column-sub-files column-primary">'.__('Sub Files','componentizer').'</th>
+          <th scope="col" id="base-components" class="manage-column column-base-components column-primary">'.__('Base Components',$this::NS).'</th>
+          <th scope="col" id="suffixes" class="manage-column column-suffixes column-primary">'.__('Suffixes',$this::NS).'</th>
+          <th scope="col" id="base-files" class="manage-column column-base-files column-primary">'.__('Base Files',$this::NS).'</th>
+          <th scope="col" id="sub-files" class="manage-column column-sub-files column-primary">'.__('Sub Files',$this::NS).'</th>
         </tr>
       </thead>
       <tbody>';
@@ -354,7 +288,7 @@ class SettingsPage extends ComponentizerAdmin {
     ?>
     <div id="componentizer-settings" class="wrap">
       <?php 
-      echo '<h1>'.__('Compontentizer','componentizer').'</h1>';
+      echo '<h1>'.__('Compontentizer',$this::NS).'</h1>';
       echo '<form id="basic" action="options.php" method="post" style="clear:both;">';
         settings_fields( 'componentizerLocationSettings' );
         do_settings_sections( 'componentizerLocationSettings' );
@@ -368,7 +302,7 @@ class SettingsPage extends ComponentizerAdmin {
     ?>
     <div id="componentizer-settings" class="wrap">
       <?php 
-      echo '<h1>'.__('Compontentizer','componentizer').'</h1>';
+      echo '<h1>'.__('Compontentizer',$this::NS).'</h1>';
       echo '<form id="basic" action="options.php" method="post" style="clear:both;">';
         settings_fields( 'componentizerArchiveSettings' );
         do_settings_sections( 'componentizerArchiveSettings' );
@@ -382,15 +316,15 @@ class SettingsPage extends ComponentizerAdmin {
     ?>
     <div id="componentizer-settings" class="wrap">
       <?php 
-      echo '<h1>'.__('Compontentizer','componentizer').'</h1>';
+      echo '<h1>'.__('Compontentizer',$this::NS).'</h1>';
         echo '<table class="wp-list-table widefat fixed striped">';
         echo '<thead>
           <tr>
-            <th scope="col" id="sync" class="manage-column column-sync column-primary">'.__('Sync','componentizer').'</th>
-            <th scope="col" id="update-option" class="manage-column column-update-option column-primary">'.__('Option','componentizer').'</th>
-            <th scope="col" id="database-version" class="manage-column column-database-version column-primary">'.__('Database Version','componentizer').'</th>
-            <th scope="col" id="syncable-version" class="manage-column column-syncable-version column-primary">'.__('Syncable Version','componentizer').'</th>
-            <th scope="col" id="value" class="manage-column column-value column-primary">'.__('Value','componentizer').'</th>
+            <th scope="col" id="sync" class="manage-column column-sync column-primary">'.__('Sync',$this::NS).'</th>
+            <th scope="col" id="update-option" class="manage-column column-update-option column-primary">'.__('Option',$this::NS).'</th>
+            <th scope="col" id="database-version" class="manage-column column-database-version column-primary">'.__('Database Version',$this::NS).'</th>
+            <th scope="col" id="syncable-version" class="manage-column column-syncable-version column-primary">'.__('Syncable Version',$this::NS).'</th>
+            <th scope="col" id="value" class="manage-column column-value column-primary">'.__('Value',$this::NS).'</th>
           </tr>
         </thead>
         <tbody>';
@@ -411,7 +345,7 @@ class SettingsPage extends ComponentizerAdmin {
             $file_timestamp = date('d M Y H:i:s',$obj_file_data['timestamp']);
             echo '<tr id="row_'.$componentizer_option.'">';
               echo '<td>';
-                echo '<button id="'.$componentizer_option.'" class="button button-primary button-sync-componentizer" value="'.$file_name.'">'.__('Sync','componentizer').'</button>';
+                echo '<button id="'.$componentizer_option.'" class="button button-primary button-sync-componentizer" value="'.$file_name.'">'.__('Sync',$this::NS).'</button>';
               echo '</td>';
               echo '<td>'.$componentizer_option.'</td>';
               echo '<td>'.$db_timestamp.'</td>';
@@ -423,6 +357,36 @@ class SettingsPage extends ComponentizerAdmin {
           }
         }
         echo '</tbody></table>';
+        echo '<p>Coming soon: <a href="#" id="migrate-to-group-names">'.__('Migrate from IDs to Group Names.',$this::NS).'</a></p>';
+      ?>
+    </div>
+    <?php
+  }
+
+  function assign_advanced_settings() {
+    $settings = get_option('componentizer_advanced_settings');
+    echo '<table class="wp-list-table widefat fixed striped"><tbody>';
+      echo '<tr>';
+        echo '<th scope="row"><label for="componentizer_component_path">'.__('Component Path',$this::NS).'</label></th>';
+        echo '<td>'.get_stylesheet_directory().'/ <input id="componentizer_component_path" name="componentizer_advanced_settings[component_path]" value="'.$settings['component_path'].'" /></td>';
+      echo '</tr>';
+      echo '<tr>';
+        echo '<th scope="row"><label for="componentizer_json_path">'.__('JSON Path',$this::NS).'</label></th>';
+        echo '<td>'.get_stylesheet_directory().'/ <input id="componentizer_json_path" name="componentizer_advanced_settings[json_path]" value="'.$settings['json_path'].'" /></td>';
+      echo '</tr>';
+    echo '</tbody></table>';
+    submit_button();
+  }
+
+  function assign_components_advanced_settings() {
+    ?>
+    <div id="componentizer-settings" class="wrap">
+      <?php
+        echo '<h1>'.__('Compontentizer',$this::NS).'</h1>';
+        echo '<form id="basic" action="options.php" method="post" style="clear:both;">';
+          settings_fields( 'componentizerAdvancedSettings' );
+          do_settings_sections( 'componentizerAdvancedSettings' );
+        echo '</form>';
       ?>
     </div>
     <?php
@@ -452,13 +416,24 @@ class SettingsPage extends ComponentizerAdmin {
     echo '#row_'.$componentizer_option;
     die();
   }
+  function ajax_update_to_group_name_callback() {
+    $acf_field_groups = $this->get_acfs();
+    $acf_id_names = [];
+    foreach ($acf_field_groups->posts as $acf_field_group) {
+      $acf_id_names[ $acf_field_group->ID ] = $acf_field_group->post_name;
+    }
+
+    var_dump($acf_id_names);
+
+    die();
+  }
 
 
   function get_component_templates() {
     $component_files = scandir(get_stylesheet_directory().'/'.Options\COMPONENT_PATH);
-    $ignore_files = array('.','..');
+    $component_templates = [];
     foreach ($component_files as $component_file) {
-      if (!in_array($component_file, $ignore_files)) {
+      if (!in_array($component_file, $this->ignore_files)) {
         $component_name = explode('-',str_replace('.php', '', $component_file));
         $component_base = array_shift($component_name);
         $component_templates[$component_base][] = implode('-', $component_name);

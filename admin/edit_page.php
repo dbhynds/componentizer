@@ -6,17 +6,12 @@ namespace Components\Admin;
 if (!is_admin()) return;
 
 use Components\Options as Options;
-use \WP_Query;
 
 class EditorPage extends ComponentizerAdmin {
 
   function __construct() {
     // Load up options
-    $this->options = Options\get_options();
     $this->location_orders = get_option('componentizer_location_orders');
-
-    // If no config file, die.
-    if ($this->options == null) return;
 
     // Add metaboxes to the appropriate post types
     add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
@@ -27,7 +22,9 @@ class EditorPage extends ComponentizerAdmin {
 
     // Add metaboxes to the appropriate post types
     $post_types = get_post_types();
-    $post_types = array_diff($post_types, $this->options['exclude_order_for_post_types']);
+    if ($exclude_post_types = get_option('componentizer_exclude_post_types')) {
+      $post_types = array_diff($post_types, $exclude_post_types);
+    }
     foreach ($post_types as $post_type) {
       add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_order_box') );
     }
@@ -79,19 +76,15 @@ class EditorPage extends ComponentizerAdmin {
   }
   function admin_get_sortable_fields($post) {
     // Set everything to empty arrays
-    $current_fields = $fields_top = $fields_middle = $fields_bottom = $fields = array();
+    $current_fields = $fields_top = $fields_middle = $fields_bottom = $fields = [];
 
     // Get the ACF field groups on this page
     $all_field_groups = acf_get_field_groups();
     $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post->ID));
     $field_groups = [];
     foreach ($filtered_field_groups as $filtered_field_group) {
-      array_push($field_groups, $filtered_field_group['ID']);
+      array_push($field_groups, $filtered_field_group['key']);
     }
-    // Include persistent fields and ACF field groups
-    // We'll iterate through the various fields and unset them here if they exist.
-    $all_fields = array_merge($field_groups,$this->options['persistant_fields']);
-    // var_dump($all_fields);
 
     // Get the saved order, if any.
     $field_ids = get_post_meta( $post->ID, '_field_order', true );
@@ -102,15 +95,13 @@ class EditorPage extends ComponentizerAdmin {
     $options = get_option( 'componentizer_fields' );
     if ($field_ids) {
       foreach ($field_ids as $field_id) {
-        if (in_array($field_id, $all_fields)) {
-          // If this field exists, unset it in $all_fields
-          $all_fields = array_diff($all_fields, [$field_id]);
+        if (in_array($field_id, $field_groups)) {
+          // If this field exists, unset it in $field_groups
+          $field_groups = array_diff($field_groups, [$field_id]);
           // Setup the field data
-          $field_title = get_the_title($field_id);
-          if ($field_title === '') $field_title = ucwords($field_id);
           $field_args = array(
               'id' => $field_id,
-              'name' => $field_title,
+              'name' => $this->get_title_by_id($field_id),
             );
           // Add it to the appropriate section
           if ($options[$field_id]['location'] == 'top') {
@@ -126,19 +117,19 @@ class EditorPage extends ComponentizerAdmin {
     }
 
     // Now, if there are any remaining fields, sort them into the correct buckets
-    foreach ($all_fields as $all_field) {
+    foreach ($field_groups as $field_group) {
       // Unset it in $all_fields
-      $all_fields = array_diff($all_fields, array($all_field));
-      $name = (is_int($all_field)) ? get_the_title($all_field) : ucwords($all_field);
+      $field_groups = array_diff($field_groups, array($field_group));
+      $name = (is_int($field_group)) ? get_the_title($field_group) : ucwords($field_group);
       // Setup the field data
       $field_args = [
-          'id' => $all_field,
-          'name' => $name,
+          'id' => $field_group,
+          'name' => $this->get_title_by_id($field_group),
         ];
       // Add it to the appropriate section
-      if ($options[$all_field]['location'] ==  'top') {
+      if ($options[$field_group]['location'] ==  'top') {
         array_push($fields_top,$field_args);
-      } elseif ($options[$all_field]['location'] == 'bottom') {
+      } elseif ($options[$field_group]['location'] == 'bottom') {
         array_push($fields_bottom,$field_args);
       } else {
         array_push($fields_middle,$field_args);

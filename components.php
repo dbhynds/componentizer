@@ -20,32 +20,15 @@ function build($components = false, $suffixes = null) {
     $location_orders = get_option('componentizer_location_orders');
     if ($location_orders === '') $location_orders = [];
     $visible_on_archive = get_option('componentizer_visible_on_archive');
-    $components = array();
+    $components = [];
     $component_ids = get_post_meta( $post->ID, '_field_order', true );
     // Set the base components to load as determined by the $component_ids
     if ($component_ids) {
-      $top_components = $sortable_components = $bottom_components = array();
-      if (!array_key_exists('top', $location_orders)) $location_orders['top'] = array();
-      if (!array_key_exists('bottom', $location_orders)) $location_orders['bottom'] = array();
-
-      foreach ($location_orders['top'] as $value) {
-        $component = array_search($value, $component_ids);
-        if ($component !== false) {
-          array_push($top_components, $value);
-          unset($component_ids[$component]);
-        }
-        unset($component);
-      }
-      foreach ($location_orders['bottom'] as $value) {
-        $component = array_search($value, $component_ids);
-        if ($component !== false) {
-          array_push($bottom_components, $value);
-          unset($component_ids[$component]);
-        }
-        unset($component);
-      }
-      $ordered_component_ids = array_merge($top_components,$component_ids,$bottom_components);
-
+      $top_components = Options\sort_groups_by_location('top',$component_ids);
+      $bottom_components = Options\sort_groups_by_location('bottom',$component_ids);
+      $sortable_components = array_diff($component_ids,$top_components,$bottom_components);
+      
+      $ordered_component_ids = array_merge($top_components,$sortable_components,$bottom_components);
       foreach ($ordered_component_ids as $component_id) {
         if (array_key_exists($component_id,$component_fields)) {
           if (is_singular() || in_array($component_id,$visible_on_archive)) {
@@ -78,7 +61,7 @@ function build($components = false, $suffixes = null) {
 function build_with($context, $component, $suffixes = null) {
   // Get the list of suffixes to try and load
   $suffixes = get_suffixes($suffixes);
-  $templates = array();
+  $templates = [];
   array_unshift($templates, Options\COMPONENT_PATH.'/'.$component.'.php');
   foreach ($suffixes as $suffix) {
     array_unshift($templates, Options\COMPONENT_PATH.'/'.$component.'-'.$suffix.'.php');

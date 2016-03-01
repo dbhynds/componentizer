@@ -34,15 +34,13 @@ function activate() {
   $plugin_data = get_plugin_data(__FILE__);
   add_option('componentizer_db_version',$plugin_data['Version']);
   add_action('after_theme_setup', 'install');
+
+  $exclude_post_types = get_post_types(['public' => false]);
+
   add_option('componentizer_advanced_settings',[
     'json_path' => 'componentizer-json',
     'component_path' => 'controllers',
-  ]);
-  add_option('componentizer_exclude_post_types',[
-    'nav_menu_item',
-    'revision',
-    'attachment',
-    'acf-field-group'
+    'exclude_post_types' => $exclude_post_types,
   ]);
   add_option('componentizer_fields',[]);
   add_option('componentizer_visible_on_archive',[]);

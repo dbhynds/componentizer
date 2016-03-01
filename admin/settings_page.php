@@ -367,12 +367,25 @@ class SettingsPage extends ComponentizerAdmin {
     $settings = get_option('componentizer_advanced_settings');
     echo '<table class="wp-list-table widefat fixed striped"><tbody>';
       echo '<tr>';
-        echo '<th scope="row"><label for="componentizer_component_path">'.__('Component Path',$this::NS).'</label></th>';
-        echo '<td>'.get_stylesheet_directory().'/ <input id="componentizer_component_path" name="componentizer_advanced_settings[component_path]" value="'.$settings['component_path'].'" /></td>';
+        echo '<th scope="row"><label for="component_path">'.__('Component Path',$this::NS).'</label></th>';
+        echo '<td>'.get_stylesheet_directory().'/ <input id="component_path" name="componentizer_advanced_settings[component_path]" value="'.$settings['component_path'].'" /></td>';
       echo '</tr>';
       echo '<tr>';
-        echo '<th scope="row"><label for="componentizer_json_path">'.__('JSON Path',$this::NS).'</label></th>';
-        echo '<td>'.get_stylesheet_directory().'/ <input id="componentizer_json_path" name="componentizer_advanced_settings[json_path]" value="'.$settings['json_path'].'" /></td>';
+        echo '<th scope="row"><label for="json_path">'.__('JSON Path',$this::NS).'</label></th>';
+        echo '<td>'.get_stylesheet_directory().'/ <input id="json_path" name="componentizer_advanced_settings[json_path]" value="'.$settings['json_path'].'" /></td>';
+      echo '</tr>';
+      echo '<tr>';
+        echo '<th scope="row"><label for="exclude_post_types">'.__('Exclude Post Types',$this::NS).'</label></th>';
+        echo '<td>';
+          $post_types = get_post_types();
+          foreach ($post_types as $post_type) {
+            echo '<label for="exclude_post_types_'.$post_type.'">';
+              $checked = (array_key_exists($post_type, $settings['exclude_post_types'])) ? 'checked' : null;
+              echo '<input type="checkbox" '.$checked.' id="exclude_post_types_'.$post_type.'" name="componentizer_advanced_settings[exclude_post_types]['.$post_type.']" value="'.$post_type.'" />';
+              echo $post_type;
+            echo '</label><br />';
+          }
+        echo '</td>';
       echo '</tr>';
     echo '</tbody></table>';
     submit_button();

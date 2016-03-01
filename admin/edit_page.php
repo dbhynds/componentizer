@@ -22,8 +22,9 @@ class EditorPage extends ComponentizerAdmin {
 
     // Add metaboxes to the appropriate post types
     $post_types = get_post_types();
-    if ($exclude_post_types = get_option('componentizer_exclude_post_types')) {
-      $post_types = array_diff($post_types, $exclude_post_types);
+    $settings = get_option('componentizer_advanced_settings');
+    if ($settings['exclude_post_types']) {
+      $post_types = array_diff($post_types, $settings['exclude_post_types']);
     }
     foreach ($post_types as $post_type) {
       add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_order_box') );

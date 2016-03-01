@@ -2,7 +2,7 @@
 /*
 Plugin Name: Componentizer
 Description: A tiny MVC for WordPress components.
-Version: 0.5
+Version: 0.6
 Author URI: http://davohynds.com
 Author: Davo Hynds
 */

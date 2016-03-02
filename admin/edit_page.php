@@ -10,12 +10,15 @@ use Components\Options as Options;
 
 class EditorPage extends ComponentizerAdmin {
 
+  var $allowed_post_types;
+
   function __construct() {
     // Load up options
     $this->location_orders = get_option('componentizer_location_orders');
 
     // Add metaboxes to the appropriate post types
     add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
+    add_action( 'content_save_pre', array($this,'build_the_content'),999);
 
   }
 
@@ -25,12 +28,13 @@ class EditorPage extends ComponentizerAdmin {
     $post_types = get_post_types();
     $settings = get_option('componentizer_advanced_settings');
     if ($settings['exclude_post_types']) {
-      $post_types = array_diff($post_types, $settings['exclude_post_types']);
+      $this->allowed_post_types = array_diff($post_types, $settings['exclude_post_types']);
     }
-    foreach ($post_types as $post_type) {
+    foreach ($this->allowed_post_types as $post_type) {
       add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_order_box') );
+      remove_post_type_support($post_type,'editor');
     }
-    add_action( 'save_post', array($this,'component_order_save_meta_box_data') );
+    add_action( 'save_post', array($this,'component_order_save_meta_box_data'), 10 );
 
   }
   
@@ -198,6 +202,16 @@ class EditorPage extends ComponentizerAdmin {
     // Update the meta field in the database.
     update_post_meta( $post_id, '_field_order', $field_order );
 
+  }
+
+  function build_the_content($content) {
+    if (in_array(get_post_type(), $this->allowed_post_types)) {
+      $built_content = Components\get_build();
+      if ($built_content) {
+        $content = $built_content;
+      }
+      return $content;
+    }
   }
 
 }

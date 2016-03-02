@@ -53,6 +53,17 @@ function build($components = false, $suffixes = null) {
 }
 
 /**
+ * [get_build description]
+ * @return [type] [description]
+ */
+function get_build($components = false, $suffixes = null) {
+  ob_start();
+  build($components,$suffixes);
+  $contents = ob_get_clean();
+  return $contents;
+}
+
+/**
  * Build a component by passing content to it
  * @param  mixed $component_content Required. A string or array of content to be used by the component.
  * @param  string $component        Required. The base component to build with.

@@ -18,7 +18,7 @@ class EditorPage extends ComponentizerAdmin {
 
     // Add metaboxes to the appropriate post types
     add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
-    add_action( 'content_save_pre', array($this,'build_the_content'),999);
+    add_action( 'save_post', array($this,'build_the_content'), 999);
 
   }
 
@@ -204,13 +204,17 @@ class EditorPage extends ComponentizerAdmin {
 
   }
 
-  function build_the_content($content) {
+  function build_the_content($post_id) {
     if (in_array(get_post_type(), $this->allowed_post_types)) {
       $built_content = Components\get_build();
       if ($built_content) {
-        $content = $built_content;
+        remove_action( 'save_post', array($this,'build_the_content'), 999);
+        wp_update_post([
+          'ID' => $post_id,
+          'post_content' => $built_content,
+        ]);
+        add_action( 'save_post', array($this,'build_the_content'), 999);
       }
-      return $content;
     }
   }
 

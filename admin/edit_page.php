@@ -5,6 +5,7 @@ namespace Components\Admin;
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
+use Components;
 use Components\Options as Options;
 
 class EditorPage extends ComponentizerAdmin {

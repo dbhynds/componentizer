@@ -18,8 +18,6 @@ class EditorPage extends ComponentizerAdmin {
 
     // Add metaboxes to the appropriate post types
     add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
-    // Set the allowed post types
-    add_action( 'plugins_loaded', array($this,'set_allowed_post_types'));
     // Save Componentizer\build() to the_content
     add_action( 'save_post', array($this,'register_query_var'), 999);
     add_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );

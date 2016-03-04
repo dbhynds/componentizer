@@ -18,18 +18,22 @@ class EditorPage extends ComponentizerAdmin {
 
     // Add metaboxes to the appropriate post types
     add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
-    add_action( 'save_post', array($this,'build_the_content'), 999);
+    // Set the allowed post types
+    add_action( 'plugins_loaded', array($this,'set_allowed_post_types'));
+    // Save Componentizer\build() to the_content
+    add_action( 'save_post', array($this,'register_query_var'), 999);
+    add_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );
 
   }
 
   function add_metaboxes_to_posts() {
-
-    // Add metaboxes to the appropriate post types
     $post_types = get_post_types();
     $settings = get_option('componentizer_advanced_settings');
     if ($settings['exclude_post_types']) {
       $this->allowed_post_types = array_diff($post_types, $settings['exclude_post_types']);
     }
+
+    // Add metaboxes to the appropriate post types
     foreach ($this->allowed_post_types as $post_type) {
       add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_order_box') );
       remove_post_type_support($post_type,'editor');
@@ -204,16 +208,27 @@ class EditorPage extends ComponentizerAdmin {
 
   }
 
-  function build_the_content($post_id) {
+  function register_query_var($post_id) {
+    add_filter( 'redirect_post_location', array( $this, 'add_componentizer_query_var' ), 99 );
+  }
+  function add_componentizer_query_var( $location ) {
+    remove_filter( 'redirect_post_location', array( $this, 'add_componentizer_query_var' ), 99 );
+    return add_query_arg( array( 'build_components' => true ), $location );
+  }
+  function save_componentizer_build() {
+    if ( (defined('DOING_AJAX') && DOING_AJAX) || !isset($_GET['build_components']) ) {
+      return;
+    }
+    remove_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );
     if (in_array(get_post_type(), $this->allowed_post_types)) {
       $built_content = Components\get_build();
       if ($built_content) {
-        remove_action( 'save_post', array($this,'build_the_content'), 999);
+        remove_action( 'save_post', array($this,'register_query_var'), 999);
         wp_update_post([
-          'ID' => $post_id,
+          'ID' => get_the_ID(),
           'post_content' => $built_content,
         ]);
-        add_action( 'save_post', array($this,'build_the_content'), 999);
+        add_action( 'save_post', array($this,'register_query_var'), 999);
       }
     }
   }

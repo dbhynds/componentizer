@@ -185,8 +185,7 @@ class SettingsPage extends ComponentizerAdmin {
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-top-components" class="order-components component-order-sort">';
       foreach ($top_fields as $top_field) {
-        $post = $this->get_acf_by_id($top_field);
-        $title = get_the_title($post);
+        $title = \Components\FieldGroups::get_title_by_id($top_field);
         if (!$title) $title = ucwords($top_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[top][]" value="'.$top_field.'" checked style="display: none;" />';
@@ -202,9 +201,8 @@ class SettingsPage extends ComponentizerAdmin {
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-bottom-components" class="order-components component-order-sort">';
       foreach ($bottom_fields as $bottom_field) {
-        $post = $this->get_acf_by_id($bottom_field);
-        $title = get_the_title($post);
-        if (!$title) $title = ucwords($top_field);
+        $title = \Components\FieldGroups::get_title_by_id($bottom_field);
+        if (!$title) $title = ucwords($bottom_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[bottom][]" value="'.$bottom_field.'" checked style="display: none;" />';
         echo '<span class="sortable ui-sortable-handle">'.$title.'</span>';

@@ -10,6 +10,7 @@ Author: Davo Hynds
 // Require these files
 $componenentizer_includes = array(
   'options.php',
+  'FieldGroup.php',
   'components.php',
   'admin/admin.php',
   'admin/settings_page.php',
@@ -28,9 +29,9 @@ foreach ($componenentizer_includes as $file) {
 }
 unset($file, $filepath);
 
-register_activation_hook( __FILE__, 'activate' );
+register_activation_hook( __FILE__, 'componentizer_activate' );
 
-function activate() {
+function componentizer_activate() {
 
   $plugin_data = get_plugin_data(__FILE__);
   add_option('componentizer_db_version',$plugin_data['Version']);

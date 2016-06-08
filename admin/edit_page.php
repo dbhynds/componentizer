@@ -40,15 +40,11 @@ class EditorPage extends ComponentizerAdmin {
     wp_nonce_field( 'component_order_save_meta_box_data', 'component_order_meta_box_nonce' );
 
     // Get a list components on the page
-    $all_field_groups = acf_get_field_groups();
-    $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => get_the_ID()));
-    $field_groups = array_column($filtered_field_groups,'key');
+    $field_groups = \Components\FieldGroups::get_for_post(get_the_ID());
 
-    $top = \Components\sort_groups_by_location('top',$field_groups);
-    $bottom = \Components\sort_groups_by_location('bottom',$field_groups);
+    $top = \Components\FieldGroups::sort_by_location('top',$field_groups);
+    $bottom = \Components\FieldGroups::sort_by_location('bottom',$field_groups);
     $middle = array_diff($field_groups,$top,$bottom);
-    usort($top, array($this,'sort_top'));
-    usort($bottom, array($this,'sort_bottom'));
     $fields = compact('top','middle','bottom');
     // var_dump($fields);
 
@@ -59,7 +55,7 @@ class EditorPage extends ComponentizerAdmin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.$this->get_title_by_id($field).'</span>';
+      echo '<span>'.\Components\FieldGroups::get_title_by_id($field).'</span>';
       echo '</div>';
     }
     // List sortable components
@@ -68,7 +64,7 @@ class EditorPage extends ComponentizerAdmin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span class="sortable ui-sortable-handle">'.$this->get_title_by_id($field).'</span>';
+      echo '<span class="sortable ui-sortable-handle">'.\Components\FieldGroups::get_title_by_id($field).'</span>';
       echo '</div>';
     }
     echo '</div>';
@@ -77,7 +73,7 @@ class EditorPage extends ComponentizerAdmin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.$$this->get_title_by_id($field).'</span>';
+      echo '<span>'.\Components\FieldGroups::get_title_by_id($field).'</span>';
       echo '</div>';
     }
     echo '</div>';

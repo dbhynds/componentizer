@@ -56,7 +56,7 @@ class ComponentizerAdmin {
     }
     return get_posts($args);
   }
-  function get_acf_by_id($id) {
+  /*function get_acf_by_id($id) {
     $args = [
       'name' => $id,
       'post_type' => 'acf-field-group',
@@ -69,9 +69,8 @@ class ComponentizerAdmin {
   function get_title_by_id($id) {
     $post = $this->get_acf_by_id($id);
     $title = get_the_title($post);
-    if (!$title) $title = ucwords($top_field);
     return $title;
-  }
+  }*/
 
 
   // Check if settings need to be synced

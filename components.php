@@ -70,18 +70,21 @@ class Componentizer {
       $visible_on_archive = get_option('componentizer_visible_on_archive');
       $components = [];
       $component_ids = get_post_meta( $this->post_id, '_field_order', true );
+
+      if (!$component_ids) {
+        $component_ids = FieldGroups::get_for_post($this->post_id);
+      }
+      
       // Set the base components to load as determined by the $component_ids
-      if ($component_ids) {
-        $top_components = $this->sort_groups_by_location('top',$component_ids);
-        $bottom_components = $this->sort_groups_by_location('bottom',$component_ids);
-        $sortable_components = array_diff($component_ids,$top_components,$bottom_components);
-        
-        $ordered_component_ids = array_merge($top_components,$sortable_components,$bottom_components);
-        foreach ($ordered_component_ids as $component_id) {
-          if (array_key_exists($component_id,$component_fields)) {
-            if (is_singular() || in_array($component_id,$visible_on_archive)) {
-              array_push($components, $component_fields[$component_id]['template']);
-            }
+      $top_components = FieldGroups::sort_by_location('top',$component_ids);
+      $bottom_components = FieldGroups::sort_by_location('bottom',$component_ids);
+      $sortable_components = array_diff($component_ids,$top_components,$bottom_components);
+      
+      $ordered_component_ids = array_merge($top_components,$sortable_components,$bottom_components);
+      foreach ($ordered_component_ids as $component_id) {
+        if (array_key_exists($component_id,$component_fields)) {
+          if (is_singular() || in_array($component_id,$visible_on_archive)) {
+            array_push($components, $component_fields[$component_id]['template']);
           }
         }
       }

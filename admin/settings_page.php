@@ -249,7 +249,7 @@ class SettingsPage extends ComponentizerAdmin {
 
       // List the base components and their subsidiary files
       echo '<h2>'.__('Component Files',$this::NS).'</h2>';
-      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.Components\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
+      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.\Components\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>

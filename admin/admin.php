@@ -2,8 +2,6 @@
 
 namespace Components\Admin;
 
-use Components\Options as Options;
-
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
@@ -13,6 +11,7 @@ class ComponentizerAdmin {
   protected $component_templates = [];
   protected $location_orders = [];
   protected $ignore_files = ['.','..','.DS_Store'];
+  protected $allowed_post_types;
 
   const NS = 'componentizer';
 
@@ -36,6 +35,13 @@ class ComponentizerAdmin {
     echo '<div class="error"><p>'.__('Error: Advanced Custom Fields must be active.', $this::NS).'</p></div>';
   }
 
+  function set_allowed_post_types() {
+    $post_types = get_post_types();
+    $settings = get_option('componentizer_advanced_settings');
+    if ($settings['exclude_post_types']) {
+      $this->allowed_post_types = array_diff($post_types, $settings['exclude_post_types']);
+    }
+  }
 
 
   function get_acfs($args = false) {
@@ -93,8 +99,8 @@ class ComponentizerAdmin {
   }
 
   function get_json_files() {
-    if (Options\JSON_PATH) {
-      $json_files = scandir(Options\JSON_PATH);
+    if (\Components\JSON_PATH) {
+      $json_files = scandir(\Components\JSON_PATH);
       $return_files = [];
       foreach ($json_files as $json_file) {
         if (!in_array($json_file, $this->ignore_files)) {
@@ -114,7 +120,7 @@ class ComponentizerAdmin {
       'timestamp' => time(),
     ];
     $json = acf_json_encode($arr_to_json);
-    $f = fopen(Options\JSON_PATH."/{$file}.json", 'w');
+    $f = fopen(\Components\JSON_PATH."/{$file}.json", 'w');
     fwrite($f, $json);
     fclose($f);
     $this::save_json_to_db();
@@ -125,8 +131,8 @@ class ComponentizerAdmin {
     $json_files = $this::get_json_files();
     $json_data = [];
     foreach ($json_files as $json_file) {
-      $json_data[$json_file] = hash_file('md5', Options\JSON_PATH."/{$json_file}");
-      $file_name = Options\JSON_PATH.'/'.$json_file;
+      $json_data[$json_file] = hash_file('md5', \Components\JSON_PATH."/{$json_file}");
+      $file_name = \Components\JSON_PATH.'/'.$json_file;
       $f = fopen($file_name, 'r');
       $json_file_data = fread($f, filesize($file_name));
       fclose($f);

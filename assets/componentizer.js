@@ -5,7 +5,7 @@
       handle: '.sortable',
       items: '> .component',
     });
-
+    
     $('#migrate-to-group-names').click(function(){
       var data = {
         'action': 'update_to_group_name'

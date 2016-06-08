@@ -1,25 +1,11 @@
 <?php
 
-namespace Components\Options;
+namespace Components;
 
 $settings = get_option('componentizer_advanced_settings');
-
 define(__NAMESPACE__.'\\COMPONENT_PATH',$settings['component_path']);
 define(__NAMESPACE__.'\\JSON_PATH',get_stylesheet_directory().'/'.$settings['json_path']);
-
-/**
- * Returns either the requested option or an array of all of the options
- * @param  string $key Array key of the option to get
- * @return array       Value of the option requested
- */
-function get_options($key = false) {
-  return;
-  if ($key && array_key_exists($key,$options)) {
-    return $options[$key];
-  } else {
-    return $options;
-  }
-}
+unset($settings);
 
 function sort_groups_by_location($location, $component_ids) {
   $local_components = [];
@@ -36,5 +22,24 @@ function sort_groups_by_location($location, $component_ids) {
     unset($component);
   }
 
+  usort($local_components, __NAMESPACE__.'\\sort_'.$location);
+
   return $local_components;
+}
+
+function sort_top($a, $b) {
+  $a_key = array_search($a['id'], $this->options['top_components']);
+  $b_key = array_search($b['id'], $this->options['top_components']);
+  return sort($a_key,$b_key);
+}
+function sort_bottom($a, $b) {
+  $a_key = array_search($a['id'], $this->options['bottom_components']);
+  $b_key = array_search($b['id'], $this->options['bottom_components']);
+  return sort($a_key,$b_key);
+}
+function sort($a_key, $b_key) {
+  if ($a_key == $b_key) {
+    return 0;
+  }
+  return ($a_key < $b_key) ? -1 : 1;
 }

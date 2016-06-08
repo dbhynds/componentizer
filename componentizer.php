@@ -14,6 +14,7 @@ $componenentizer_includes = array(
   'admin/admin.php',
   'admin/settings_page.php',
   'admin/edit_page.php',
+  'admin/migrate.php',
 );
 
 $plugin_directory = plugin_dir_path(__FILE__);

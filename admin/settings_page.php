@@ -2,9 +2,6 @@
 
 namespace Components\Admin;
 
-use Components\Options as Options;
-
-
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
@@ -35,7 +32,8 @@ class SettingsPage extends ComponentizerAdmin {
     add_submenu_page($slug, __('Location Orders',$this::NS), __('Location Orders',$this::NS), $cap, 'location-orders', array($this,'assign_components_location_orders') );
     add_submenu_page($slug, __('Visible on Archive Pages',$this::NS), __('Visible on Archive',$this::NS), $cap, 'visible-on-archive', array($this,'assign_components_visible_on_archive') );
     add_submenu_page($slug, __('Settings',$this::NS), __('Settings',$this::NS), $cap, 'settings', array($this,'assign_components_advanced_settings') );
-    // if (Options\JSON_PATH) add_submenu_page($slug, __('Sync Configuration',$this::NS), __('Sync Configuration',$this::NS), $cap, 'sync-configuration', array($this,'assign_options_for_sync') );
+    // add_submenu_page($slug, __('Migrate',$this::NS), __('Migrate',$this::NS), $cap, 'migrate', array($this,'assign_migrate') );
+    // if (JSON_PATH) add_submenu_page($slug, __('Sync Configuration',$this::NS), __('Sync Configuration',$this::NS), $cap, 'sync-configuration', array($this,'assign_options_for_sync') );
     
   }
   function register_settings() {
@@ -251,7 +249,7 @@ class SettingsPage extends ComponentizerAdmin {
 
       // List the base components and their subsidiary files
       echo '<h2>'.__('Component Files',$this::NS).'</h2>';
-      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.Options\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
+      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.Components\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>
@@ -333,7 +331,7 @@ class SettingsPage extends ComponentizerAdmin {
         $json_files = $this::get_json_files();
         $json_files_data = [];
         foreach ($json_files as $json_file) {
-          $file_name = Options\JSON_PATH."/{$json_file}";
+          $file_name = Components\JSON_PATH."/{$json_file}";
           if ($json_times_files[$json_file] !== $json_times_db[$json_file]) {
             $f = fopen($file_name, 'r');
             $componentizer_option = 'componentizer_'.str_replace('.json', null, $json_file);
@@ -405,6 +403,7 @@ class SettingsPage extends ComponentizerAdmin {
     <?php
   }
 
+
   function fields_updated( $input ) {
     $this::save_json_file('fields');
     return $input;
@@ -443,7 +442,7 @@ class SettingsPage extends ComponentizerAdmin {
 
 
   function get_component_templates() {
-    $component_files = scandir(get_stylesheet_directory().'/'.Options\COMPONENT_PATH);
+    $component_files = scandir(get_stylesheet_directory().'/'.\Components\COMPONENT_PATH);
     $component_templates = [];
     foreach ($component_files as $component_file) {
       if (!in_array($component_file, $this->ignore_files)) {

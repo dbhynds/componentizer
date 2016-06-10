@@ -1,6 +1,6 @@
 <?php
 
-namespace Components;
+namespace Componentizer;
 
 $settings = get_option('componentizer_advanced_settings');
 define(__NAMESPACE__.'\\COMPONENT_PATH',$settings['component_path']);

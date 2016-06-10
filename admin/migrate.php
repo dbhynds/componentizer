@@ -1,11 +1,11 @@
 <?php
 
-namespace Components\Admin;
+namespace Componentizer\Admin;
 
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
-class Migrate extends ComponentizerAdmin {
+class Migrate extends Admin {
 
   function __construct() {
 

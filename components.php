@@ -1,8 +1,8 @@
 <?php
 
-namespace Components;
+namespace Componentizer;
 
-class Componentizer {
+class Components {
 
   private $post_id;
   private $suffixes = [];

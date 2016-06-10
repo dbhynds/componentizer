@@ -9,13 +9,13 @@ Author: Davo Hynds
  
 // Require these files
 $componenentizer_includes = array(
-  'options.php',
-  'FieldGroup.php',
-  'components.php',
-  'admin/admin.php',
-  'admin/settings_page.php',
-  'admin/edit_page.php',
-  'admin/migrate.php',
+  'Options.php',
+  'FieldGroups.php',
+  'Components.php',
+  'admin/Admin.php',
+  'admin/SettingsPage.php',
+  'admin/EditPage.php',
+  'admin/Migrate.php',
 );
 
 $plugin_directory = plugin_dir_path(__FILE__);

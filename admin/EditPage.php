@@ -1,11 +1,11 @@
 <?php
 
-namespace Components\Admin;
+namespace Componentizer\Admin;
 
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
-class EditorPage extends ComponentizerAdmin {
+class EditorPage extends Admin {
 
   function __construct() {
     // Load up options
@@ -39,11 +39,13 @@ class EditorPage extends ComponentizerAdmin {
     // Add a nonce
     wp_nonce_field( 'component_order_save_meta_box_data', 'component_order_meta_box_nonce' );
 
-    // Get a list components on the page
-    $field_groups = \Components\FieldGroups::get_for_post(get_the_ID());
+    $field_group = new \Componentizer\FieldGroups;
 
-    $top = \Components\FieldGroups::sort_by_location('top',$field_groups);
-    $bottom = \Components\FieldGroups::sort_by_location('bottom',$field_groups);
+    // Get a list components on the page
+    $field_groups = $field_group->get_for_post(get_the_ID());
+
+    $top = $field_group->sort_by_location('top',$field_groups);
+    $bottom = $field_group->sort_by_location('bottom',$field_groups);
     $middle = array_diff($field_groups,$top,$bottom);
     $fields = compact('top','middle','bottom');
     // var_dump($fields);
@@ -55,7 +57,7 @@ class EditorPage extends ComponentizerAdmin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.\Components\FieldGroups::get_title_by_id($field).'</span>';
+      echo '<span>'.$field_group->get_title_by_id($field).'</span>';
       echo '</div>';
     }
     // List sortable components
@@ -64,7 +66,7 @@ class EditorPage extends ComponentizerAdmin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span class="sortable ui-sortable-handle">'.\Components\FieldGroups::get_title_by_id($field).'</span>';
+      echo '<span class="sortable ui-sortable-handle">'.$field_group->get_title_by_id($field).'</span>';
       echo '</div>';
     }
     echo '</div>';
@@ -73,7 +75,7 @@ class EditorPage extends ComponentizerAdmin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.\Components\FieldGroups::get_title_by_id($field).'</span>';
+      echo '<span>'.$field_group->get_title_by_id($field).'</span>';
       echo '</div>';
     }
     echo '</div>';
@@ -114,7 +116,7 @@ class EditorPage extends ComponentizerAdmin {
     }
     remove_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );
     if (in_array(get_post_type(), $this->allowed_post_types)) {
-      $componentizer = new \Components\Componentizer;
+      $componentizer = new \Componentizer\Components;
       $built_content = $componentizer->get_build();
       if ($built_content) {
         remove_action( 'save_post', array($this,'register_query_var'), 999);

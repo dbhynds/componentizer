@@ -1,6 +1,6 @@
 <?php
 
-namespace Components;
+namespace Componentizer;
 
 class FieldGroups {
 

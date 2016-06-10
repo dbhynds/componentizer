@@ -1,11 +1,11 @@
 <?php
 
-namespace Components\Admin;
+namespace Componentizer\Admin;
 
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
-class SettingsPage extends ComponentizerAdmin {
+class SettingsPage extends Admin {
 
   function __construct() {
     // Load up options
@@ -185,7 +185,7 @@ class SettingsPage extends ComponentizerAdmin {
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-top-components" class="order-components component-order-sort">';
       foreach ($top_fields as $top_field) {
-        $title = \Components\FieldGroups::get_title_by_id($top_field);
+        $title = \Componentizer\FieldGroups::get_title_by_id($top_field);
         if (!$title) $title = ucwords($top_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[top][]" value="'.$top_field.'" checked style="display: none;" />';
@@ -201,7 +201,7 @@ class SettingsPage extends ComponentizerAdmin {
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-bottom-components" class="order-components component-order-sort">';
       foreach ($bottom_fields as $bottom_field) {
-        $title = \Components\FieldGroups::get_title_by_id($bottom_field);
+        $title = \Componentizer\FieldGroups::get_title_by_id($bottom_field);
         if (!$title) $title = ucwords($bottom_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[bottom][]" value="'.$bottom_field.'" checked style="display: none;" />';
@@ -247,7 +247,7 @@ class SettingsPage extends ComponentizerAdmin {
 
       // List the base components and their subsidiary files
       echo '<h2>'.__('Component Files',$this::NS).'</h2>';
-      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.\Components\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
+      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.\Componentizer\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>
@@ -440,7 +440,7 @@ class SettingsPage extends ComponentizerAdmin {
 
 
   function get_component_templates() {
-    $component_files = scandir(get_stylesheet_directory().'/'.\Components\COMPONENT_PATH);
+    $component_files = scandir(get_stylesheet_directory().'/'.\Componentizer\COMPONENT_PATH);
     $component_templates = [];
     foreach ($component_files as $component_file) {
       if (!in_array($component_file, $this->ignore_files)) {

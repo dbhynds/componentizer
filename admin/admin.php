@@ -1,11 +1,11 @@
 <?php
 
-namespace Components\Admin;
+namespace Componentizer\Admin;
 
 // Don't bother on the front end or non-admins
 if (!is_admin()) return;
 
-class ComponentizerAdmin {
+class Admin {
   
   // Options that will be loaded via config
   protected $component_templates = [];
@@ -98,8 +98,8 @@ class ComponentizerAdmin {
   }
 
   function get_json_files() {
-    if (\Components\JSON_PATH) {
-      $json_files = scandir(\Components\JSON_PATH);
+    if (\Componentizer\JSON_PATH) {
+      $json_files = scandir(\Componentizer\JSON_PATH);
       $return_files = [];
       foreach ($json_files as $json_file) {
         if (!in_array($json_file, $this->ignore_files)) {
@@ -119,7 +119,7 @@ class ComponentizerAdmin {
       'timestamp' => time(),
     ];
     $json = acf_json_encode($arr_to_json);
-    $f = fopen(\Components\JSON_PATH."/{$file}.json", 'w');
+    $f = fopen(\Componentizer\JSON_PATH."/{$file}.json", 'w');
     fwrite($f, $json);
     fclose($f);
     $this::save_json_to_db();
@@ -130,8 +130,8 @@ class ComponentizerAdmin {
     $json_files = $this::get_json_files();
     $json_data = [];
     foreach ($json_files as $json_file) {
-      $json_data[$json_file] = hash_file('md5', \Components\JSON_PATH."/{$json_file}");
-      $file_name = \Components\JSON_PATH.'/'.$json_file;
+      $json_data[$json_file] = hash_file('md5', \Componentizer\JSON_PATH."/{$json_file}");
+      $file_name = \Componentizer\JSON_PATH.'/'.$json_file;
       $f = fopen($file_name, 'r');
       $json_file_data = fread($f, filesize($file_name));
       fclose($f);
@@ -150,4 +150,4 @@ class ComponentizerAdmin {
 }
 
 // Initialize Admin
-new ComponentizerAdmin();
+new Admin();

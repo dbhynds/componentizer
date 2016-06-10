@@ -10,13 +10,13 @@ class Migrate extends Admin {
   function __construct() {
 
     // Add the reference page to the admin menu
-    add_action( 'admin_menu', [$this,'add_menu_page'] );
-    add_action( 'admin_init', array($this,'set_allowed_post_types'), 0);
-    add_action( 'admin_init', [$this,'register_settings'], 10 );
+    // add_action( 'admin_menu', [$this,'add_menu_page'] );
+    // add_action( 'admin_init', [$this,'set_allowed_post_types'], 0);
+    // add_action( 'admin_init', [$this,'register_settings'], 10 );
 
 
     // Add metaboxes to the appropriate post types
-    // add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
+    add_action( 'admin_init', array($this,'add_metaboxes_to_posts'));
 
   }
 
@@ -138,12 +138,12 @@ class Migrate extends Admin {
     $settings = get_option('componentizer_advanced_settings');
     if ($settings['exclude_post_types']) {
       $this->allowed_post_types = array_diff($post_types, $settings['exclude_post_types']);
+      // Add metaboxes to the appropriate post types
+      foreach ($this->allowed_post_types as $post_type) {
+        add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_migrate_box') );
+      }
     }
 
-    // Add metaboxes to the appropriate post types
-    foreach ($this->allowed_post_types as $post_type) {
-      add_action( 'add_meta_boxes_'.$post_type, array($this,'add_component_migrate_box') );
-    }
     add_action( 'save_post', array($this,'migrate_save_meta_box_data'), 10 );
 
   }
@@ -154,12 +154,13 @@ class Migrate extends Admin {
     add_meta_box( 'component_migrate', __('Use Componentizer','componentizer'), array($this,'migrate_box'), null, 'side', 'high' );
   }
   function migrate_box($post) {
-    $use = get_post_meta($post->id, 'componentizer_use');
+    $use = get_post_meta(get_the_ID(), 'componentizer_use');
     wp_nonce_field( 'migrate_save_meta_box_data', 'migrate_meta_box_nonce' );
 
     echo '<input id="componentizer_use" name="componentizer_use" type="checkbox" value="1" />';
     echo '<label for="componentizer_use">'.__('Migrate post content to componentizer','componentizer').'</label>';
-
+    $field_groups = new \Componentizer\FieldGroups;
+    $group_ids = $field_groups->get_for_post(get_the_ID());
   }
   
   function migrate_save_meta_box_data($post_id) {

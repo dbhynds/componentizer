@@ -191,12 +191,13 @@ class SettingsPage extends Admin {
     $new_bottom_fields = array_merge($bottom_fields,$new_bottom_fields);
     $bottom_fields = array_unique($new_bottom_fields);
     
+    $field_groups = Componentizer\FieldGroups();
     echo '<div class="card">';
       echo '<h3>'.__('Top Components',$this::NS).'</h3>';
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-top-components" class="order-components component-order-sort">';
       foreach ($top_fields as $top_field) {
-        $title = \Componentizer\FieldGroups::get_title_by_id($top_field);
+        $title = $field_groups->get_title_by_id($top_field);
         if (!$title) $title = ucwords($top_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[top][]" value="'.$top_field.'" checked style="display: none;" />';
@@ -212,7 +213,7 @@ class SettingsPage extends Admin {
       echo '<div class="component-order-sort-wrap">';
       echo '<div id="order-bottom-components" class="order-components component-order-sort">';
       foreach ($bottom_fields as $bottom_field) {
-        $title = \Componentizer\FieldGroups::get_title_by_id($bottom_field);
+        $title = $field_groups->get_title_by_id($bottom_field);
         if (!$title) $title = ucwords($bottom_field);
         echo '<div class="postbox component">';
         echo '<input type="checkbox" name="componentizer_location_orders[bottom][]" value="'.$bottom_field.'" checked style="display: none;" />';

@@ -13,7 +13,7 @@ class EditorPage extends Admin {
 
     // Add metaboxes to the appropriate post types
     add_action( 'admin_init', array($this,'set_allowed_post_types'), 0);
-    add_action( 'admin_init', array($this,'add_metaboxes_to_posts'), 10);
+    add_action( 'admin_init', array($this,'add_metaboxes_to_posts'), 0);
     // Save Componentizer\build() to the_content
     add_action( 'save_post', array($this,'register_query_var'), 999);
     add_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );
@@ -39,7 +39,7 @@ class EditorPage extends Admin {
     // Add a nonce
     wp_nonce_field( 'component_order_save_meta_box_data', 'component_order_meta_box_nonce' );
 
-    $field_groups = new \Componentizer\FieldGroups;
+    $field_groups = new \Componentizer\FieldGroups();
 
     // Get a list components on the page
     $field_groups_ids = $field_groups->get_for_post(get_the_ID());
@@ -116,7 +116,7 @@ class EditorPage extends Admin {
     }
     remove_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );
     if (in_array(get_post_type(), $this->allowed_post_types)) {
-      $componentizer = new \Componentizer\Components;
+      $componentizer = new \Componentizer\Components();
       $built_content = $componentizer->get_build();
       if ($built_content) {
         remove_action( 'save_post', array($this,'register_query_var'), 999);

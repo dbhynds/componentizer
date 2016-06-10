@@ -71,13 +71,14 @@ class Components {
       $components = [];
       $component_ids = get_post_meta( $this->post_id, '_field_order', true );
 
+      $field_groups = new FieldGroups();
       if (!$component_ids) {
-        $component_ids = FieldGroups::get_for_post($this->post_id);
+        $component_ids = $field_groups->get_for_post($this->post_id);
       }
       
       // Set the base components to load as determined by the $component_ids
-      $top_components = FieldGroups::sort_by_location('top',$component_ids);
-      $bottom_components = FieldGroups::sort_by_location('bottom',$component_ids);
+      $top_components = $field_groups->sort_by_location('top',$component_ids);
+      $bottom_components = $field_groups->sort_by_location('bottom',$component_ids);
       $sortable_components = array_diff($component_ids,$top_components,$bottom_components);
       
       $ordered_component_ids = array_merge($top_components,$sortable_components,$bottom_components);

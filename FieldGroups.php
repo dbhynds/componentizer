@@ -24,6 +24,12 @@ class FieldGroups {
     $all_field_groups = acf_get_field_groups();
     $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post_id));
     $group_ids = array_column($filtered_field_groups,'key');
+    $options = get_option( 'componentizer_fields' );
+    foreach ($group_ids as $key => $group_id) {
+      if (array_key_exists($group_id, $options) && !$options[$group_id]['component']) {
+        unset($group_ids[$key]);
+      }
+    }
     return $group_ids;
   }
 

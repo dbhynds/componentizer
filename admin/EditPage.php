@@ -33,20 +33,20 @@ class EditorPage extends Admin {
   
   // Add the component order metabox to the editor page
   function add_component_order_box() {
-    add_meta_box( 'mb_component_field_order', __('Component Order','componentizer'), array($this,'component_order_box'), null, 'side', 'high' );
+    add_meta_box( 'mb_component_field_order', __('Component Order','componentizer'), array($this,'component_order_box'), null, 'side', 'low' );
   }
   function component_order_box() {
     // Add a nonce
     wp_nonce_field( 'component_order_save_meta_box_data', 'component_order_meta_box_nonce' );
 
-    $field_group = new \Componentizer\FieldGroups;
+    $field_groups = new \Componentizer\FieldGroups;
 
     // Get a list components on the page
-    $field_groups = $field_group->get_for_post(get_the_ID());
+    $field_groups_ids = $field_groups->get_for_post(get_the_ID());
 
-    $top = $field_group->sort_by_location('top',$field_groups);
-    $bottom = $field_group->sort_by_location('bottom',$field_groups);
-    $middle = array_diff($field_groups,$top,$bottom);
+    $top = $field_groups->sort_by_location('top',$field_groups_ids);
+    $bottom = $field_groups->sort_by_location('bottom',$field_groups_ids);
+    $middle = array_diff($field_groups_ids,$top,$bottom);
     $fields = compact('top','middle','bottom');
     // var_dump($fields);
 
@@ -57,7 +57,7 @@ class EditorPage extends Admin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.$field_group->get_title_by_id($field).'</span>';
+      echo '<span>'.$field_groups->get_title_by_id($field).'</span>';
       echo '</div>';
     }
     // List sortable components
@@ -66,7 +66,7 @@ class EditorPage extends Admin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span class="sortable ui-sortable-handle">'.$field_group->get_title_by_id($field).'</span>';
+      echo '<span class="sortable ui-sortable-handle">'.$field_groups->get_title_by_id($field).'</span>';
       echo '</div>';
     }
     echo '</div>';
@@ -75,7 +75,7 @@ class EditorPage extends Admin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.$field_group->get_title_by_id($field).'</span>';
+      echo '<span>'.$field_groups->get_title_by_id($field).'</span>';
       echo '</div>';
     }
     echo '</div>';

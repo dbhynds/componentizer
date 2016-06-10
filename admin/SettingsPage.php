@@ -90,6 +90,7 @@ class SettingsPage extends Admin {
       echo '<thead>
         <tr>
           <th scope="col" id="title" class="manage-column column-title">'.__('Title',$this::NS).'</th>
+          <th scope="col" id="component" class="manage-column column-component">'.__('Component',$this::NS).'</th>
           <th scope="col" id="base-component" class="manage-column column-base-component">'.__('Base Component',$this::NS).'</th>
           <th scope="col" id="location" class="manage-column column-location">'.__('Location',$this::NS).'</th>
         </tr>
@@ -112,7 +113,7 @@ class SettingsPage extends Admin {
         }
         $template .= '</select>';
         
-        $in_top = $in_sortable = $in_bottom = null;
+        $in_top = $in_sortable = $in_bottom = $is_component = null;
         if (array_key_exists($field_id, $options)) {
           if ($options[$field_id]['location'] == 'top') {
             $in_top = 'checked';
@@ -121,6 +122,9 @@ class SettingsPage extends Admin {
           } else {
             $in_sortable = 'checked';
           }
+          if ($options[$field_id]['component']) {
+            $is_component = 'checked';
+          }
         } else {
           $in_sortable = 'checked';
         }
@@ -128,6 +132,13 @@ class SettingsPage extends Admin {
         echo '<tr class="'.$row_class.'">';
         // echo '<td>'.$field_id.'</td>';
         echo '<td>'.$acf_field->post_title.'</td>';
+        echo '<td>';
+          echo '<input type="hidden" name="componentizer_fields['.$field_id.'][component]" value="0">';
+          echo '<label for="'.$field_id.'_top">';
+            echo '<input type="checkbox" id="'.$field_id.'_component" name="componentizer_fields['.$field_id.'][component]" '.$is_component.' value="1">';
+            _e('Component',$this::NS);
+          echo '</label> ';
+        echo '</td>';
         echo '<td>'.$template.'</td>';
         echo '<td>';
           echo '<label for="'.$field_id.'_top">';

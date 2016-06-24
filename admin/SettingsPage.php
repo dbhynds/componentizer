@@ -11,7 +11,7 @@ class SettingsPage extends Admin {
     // Load up options
     $this->location_orders = get_option('componentizer_location_orders');
     $this->settings = get_option('componentizer_advanced_settings');
-    $this->json_path = get_stylesheet_directory().'/'.$this->settings['json_path'];
+    // $this->json_path = get_stylesheet_directory().'/'.$this->settings['json_path'];
     // Add the reference page to the admin menu
     add_action( 'admin_menu', [$this,'add_menu_page'] );
     // Register settings
@@ -322,7 +322,7 @@ class SettingsPage extends Admin {
     <?php
   }
 
-  function assign_options_for_sync() {
+  /*function assign_options_for_sync() {
     ?>
     <div id="componentizer-settings" class="wrap">
       <?php 
@@ -371,7 +371,7 @@ class SettingsPage extends Admin {
       ?>
     </div>
     <?php
-  }
+  }*/
 
   function assign_advanced_settings() {
     $settings = get_option('componentizer_advanced_settings');

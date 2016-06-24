@@ -13,7 +13,7 @@ class Admin {
   protected $ignore_files = ['.','..','.DS_Store'];
   protected $allowed_post_types;
   protected $settings;
-  protected $json_path;
+  // protected $json_path;
 
   const NS = 'componentizer';
 
@@ -25,20 +25,37 @@ class Admin {
     // Enqueue admin scripts and styles
     add_action( 'admin_enqueue_scripts', array($this,'enqueue_scripts') );
     $this->settings = get_option('componentizer_advanced_settings');
-    $this->json_path = get_stylesheet_directory().'/'.$this->settings['json_path'];
+    // $this->json_path = get_stylesheet_directory().'/'.$this->settings['json_path'];
   }
 
-  // Make sure ACF is enabled
+  /**
+   * Check if ACF Pro is enabled
+   */
   function check_for_acf() {
     if (!is_plugin_active('advanced-custom-fields-pro/acf.php') ) {
       add_action( 'admin_notices', array($this,'require_acf') );
     }
   }
-  // If not, show a warning
+  /**
+   * Add an admin notice that ACF Pro is required
+   */
   function require_acf() {
-    echo '<div class="error"><p>'.__('Error: Advanced Custom Fields must be active.', $this::NS).'</p></div>';
+    echo '<div class="error"><p>'.__('Error: Advanced Custom Fields Pro must be active.', $this::NS).'</p></div>';
   }
 
+  /**
+   * Enqueue admin scripts and styles
+   */
+  function enqueue_scripts() {
+    $asset_base = plugins_url('componentizer/assets/','componentizer');
+    wp_enqueue_style('componentizer', $asset_base.'componentizer.css' );
+    wp_enqueue_script('jquery-ui-sortable');
+    wp_enqueue_script('componentizer', $asset_base.'componentizer.js',array('jquery-ui-sortable'));
+  }
+
+  /**
+   * Get the post types to use Componentizer for
+   */
   function set_allowed_post_types() {
     $post_types = get_post_types();
     $settings = get_option('componentizer_advanced_settings');
@@ -47,7 +64,11 @@ class Admin {
     }
   }
 
-
+  /**
+   * Get all ACF Group posts
+   * @param  boolean $args Default $args for get_posts()
+   * @return array         Array of ACF Group posts of type $post
+   */
   function get_acfs($args = false) {
     if (!$args) {
       $args = [
@@ -77,7 +98,7 @@ class Admin {
   }*/
 
 
-  // Check if settings need to be synced
+  /*// Check if settings need to be synced
   function check_for_sync() {
     $json_times_db = get_option('componentizer_json_timestamps');
     $json_times_files = $this::get_json_file_timestamps();
@@ -91,17 +112,9 @@ class Admin {
   // Notify if a sync is needed
   function sync_needed() {
     echo '<div class="error"><p>'.__('There is a sync available for Componentizer.', $this::NS).'</p></div>';
-  }
+  }*/
 
-  // Enqueue styles and scripts
-  function enqueue_scripts() {
-    $asset_base = plugins_url('componentizer/assets/','componentizer');
-    wp_enqueue_style('componentizer', $asset_base.'componentizer.css' );
-    wp_enqueue_script('jquery-ui-sortable');
-    wp_enqueue_script('componentizer', $asset_base.'componentizer.js',array('jquery-ui-sortable'));
-  }
-
-  function get_json_files() {
+  /*function get_json_files() {
     if ($this->json_path) {
       $json_files = scandir($this->json_path);
       $return_files = [];
@@ -149,7 +162,7 @@ class Admin {
   function save_json_to_db() {
     $json_data = $this::get_json_file_timestamps();
     update_option('componentizer_json_timestamps',$json_data);
-  }
+  }*/
 
 }
 

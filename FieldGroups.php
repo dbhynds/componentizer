@@ -21,6 +21,8 @@ class FieldGroups {
   }
 
   public static function get_for_post($post_id) {
+    $post_fields = get_post_meta($post_id,'_field_order',true);
+
     $all_field_groups = \acf_get_field_groups();
     $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post_id));
     $group_ids = array_column($filtered_field_groups,'key');
@@ -30,7 +32,9 @@ class FieldGroups {
         unset($group_ids[$key]);
       }
     }
-    return $group_ids;
+    $existing_ids = get_post_meta($post_id,'_field_order',true);
+    $ids = array_unique(array_merge($existing_ids,$group_ids));
+    return $ids;
   }
 
   public static function sort_by_location($location, $component_ids) {

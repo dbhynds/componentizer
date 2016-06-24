@@ -41,10 +41,10 @@ class SettingsPage extends Admin {
   function register_settings() {
 
     // Save json data
-    add_filter( 'update_option_componentizer_fields', array($this, 'fields_updated') );
-    add_filter( 'update_option_componentizer_location_orders', array($this, 'location_orders_updated') );
-    add_filter( 'update_option_componentizer_visible_on_archive', array($this, 'visible_on_archive_updated') );
-    add_filter( 'update_option_componentizer_advanced_settings', array($this, 'advanced_settings_updated') );
+    // add_filter( 'update_option_componentizer_fields', array($this, 'fields_updated') );
+    // add_filter( 'update_option_componentizer_location_orders', array($this, 'location_orders_updated') );
+    // add_filter( 'update_option_componentizer_visible_on_archive', array($this, 'visible_on_archive_updated') );
+    // add_filter( 'update_option_componentizer_advanced_settings', array($this, 'advanced_settings_updated') );
 
     $this->component_templates = $this->get_component_templates();
 
@@ -193,7 +193,7 @@ class SettingsPage extends Admin {
     $new_bottom_fields = array_merge($bottom_fields,$new_bottom_fields);
     $bottom_fields = array_unique($new_bottom_fields);
     
-    $field_groups = Componentizer\FieldGroups();
+    $field_groups = new \Componentizer\FieldGroups();
     echo '<div class="card">';
       echo '<h3>'.__('Top Components',$this::NS).'</h3>';
       echo '<div class="component-order-sort-wrap">';
@@ -416,16 +416,16 @@ class SettingsPage extends Admin {
   }
 
 
-  function fields_updated( $input ) {
-    $this::save_json_file('fields');
+  /*function fields_updated( $input ) {
+    // $this::save_json_file('fields');
     return $input;
   }
   function location_orders_updated( $input ) {
-    $this::save_json_file('location_orders');
+    // $this::save_json_file('location_orders');
     return $input;
   }
   function visible_on_archive_updated( $input ) {
-    $this::save_json_file('visible_on_archive');
+    // $this::save_json_file('visible_on_archive');
     return $input;
   }
   function ajax_sync_callback() {
@@ -450,7 +450,7 @@ class SettingsPage extends Admin {
     var_dump($acf_id_names);
 
     die();
-  }
+  }*/
 
 
   function get_component_templates() {

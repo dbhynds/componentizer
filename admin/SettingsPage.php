@@ -380,11 +380,11 @@ class SettingsPage extends Admin {
         echo '<th scope="row"><label for="component_path">'.__('Component Path',$this::NS).'</label></th>';
         echo '<td>'.get_stylesheet_directory().'/ <input id="component_path" name="componentizer_advanced_settings[component_path]" value="'.$settings['component_path'].'" /></td>';
       echo '</tr>';
-      echo '<tr>';
+      /*echo '<tr>';
         echo '<th scope="row"><label for="json_path">'.__('JSON Path',$this::NS).'</label></th>';
         echo '<td>'.get_stylesheet_directory().'/ <input id="json_path" name="componentizer_advanced_settings[json_path]" value="'.$settings['json_path'].'" /></td>';
       echo '</tr>';
-      echo '<tr>';
+      echo '<tr>';*/
         echo '<th scope="row"><label for="exclude_post_types">'.__('Exclude Post Types',$this::NS).'</label></th>';
         echo '<td>';
           $post_types = get_post_types();

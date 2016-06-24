@@ -9,7 +9,7 @@ Author: Davo Hynds
  
 // Require these files
 $componenentizer_includes = array(
-  'Options.php',
+  // 'Options.php',
   'FieldGroups.php',
   'Components.php',
   'Context.php',
@@ -33,7 +33,7 @@ unset($file, $filepath);
 register_activation_hook( __FILE__, 'componentizer_activate' );
 
 function componentizer_activate() {
-
+  
   $plugin_data = get_plugin_data(__FILE__);
   add_option('componentizer_db_version',$plugin_data['Version']);
   add_action('after_theme_setup', 'install');

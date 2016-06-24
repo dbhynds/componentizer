@@ -4,36 +4,27 @@ namespace Componentizer;
 
 class Context {
 
-  private $lock = false;
-
-  public function __set($name, $value) {
-    if ($this->lock) {
-      $this->$name = $value;
-    }
-    return $this->$name;
-  }
-  public function setProperty($property, $value, $unlock = false) {
-    if (!property_exists($this, $property) || $unlock) {
-      $this->lock = true;
-      $this->$property = $value;
-      $this->lock = false;
-    }
+  public function setProperty($property, $value) {
+    $this->$property = $value;
     return $this->$property;
   }
-  public function setProperties(Array $values, $unlock = false) {
+  public function setProperties(Array $values) {
     $return = [];
     foreach ($values as $key => $value) {
-      $this->setProperty($key,$value,$unlock);
+      $this->setProperty($key,$value);
       $return[$key] = $this->$key;
     }
     return $return;
   }
 
-  public function toArray() {
+  public function get() {
     return get_object_vars($this);
   }
   public function render($twig) {
-    return \Timber::render($twig,$this->toArray());
+    return \Timber::render($twig,$this->get());
+  }
+  public function compile($twig) {
+    return \Timber::compile($twig,$this->get());
   }
   
 }

@@ -21,7 +21,7 @@ class FieldGroups {
   }
 
   public static function get_for_post($post_id) {
-    $all_field_groups = acf_get_field_groups();
+    $all_field_groups = \acf_get_field_groups();
     $filtered_field_groups = acf_filter_field_groups($all_field_groups,array('post_id' => $post_id));
     $group_ids = array_column($filtered_field_groups,'key');
     $options = get_option( 'componentizer_fields' );
@@ -36,7 +36,7 @@ class FieldGroups {
   public static function sort_by_location($location, $component_ids) {
     $local_components = [];
     $location_orders = get_option('componentizer_location_orders');
-    if ($location_orders === '') $location_orders = [];
+    if ($location_orders === '' || !$location_orders) $location_orders = [];
     if (!array_key_exists($location, $location_orders)) $location_orders[$location] = [];
 
     foreach ($location_orders[$location] as $value) {

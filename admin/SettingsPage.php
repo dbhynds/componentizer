@@ -10,6 +10,8 @@ class SettingsPage extends Admin {
   function __construct() {
     // Load up options
     $this->location_orders = get_option('componentizer_location_orders');
+    $this->settings = get_option('componentizer_advanced_settings');
+    $this->json_path = get_stylesheet_directory().'/'.$this->settings['json_path'];
     // Add the reference page to the admin menu
     add_action( 'admin_menu', [$this,'add_menu_page'] );
     // Register settings
@@ -259,7 +261,7 @@ class SettingsPage extends Admin {
 
       // List the base components and their subsidiary files
       echo '<h2>'.__('Component Files',$this::NS).'</h2>';
-      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.\Componentizer\COMPONENT_PATH.'</code> '.__('directory of your theme.',$this::NS).'</p>';
+      echo '<p>'.__('These files are located in the',$this::NS).' <code>'.$this->settings['component_path'].'</code> '.__('directory of your theme.',$this::NS).'</p>';
       echo '<table class="wp-list-table widefat fixed striped">';
       echo '<thead>
         <tr>
@@ -341,7 +343,7 @@ class SettingsPage extends Admin {
         $json_files = $this::get_json_files();
         $json_files_data = [];
         foreach ($json_files as $json_file) {
-          $file_name = Components\JSON_PATH."/{$json_file}";
+          $file_name = $this->json_path."/{$json_file}";
           if ($json_times_files[$json_file] !== $json_times_db[$json_file]) {
             $f = fopen($file_name, 'r');
             $componentizer_option = 'componentizer_'.str_replace('.json', null, $json_file);
@@ -452,7 +454,7 @@ class SettingsPage extends Admin {
 
 
   function get_component_templates() {
-    $component_files = scandir(get_stylesheet_directory().'/'.\Componentizer\COMPONENT_PATH);
+    $component_files = scandir(get_stylesheet_directory().'/'.$this->settings['component_path']);
     $component_templates = [];
     foreach ($component_files as $component_file) {
       if (!in_array($component_file, $this->ignore_files)) {

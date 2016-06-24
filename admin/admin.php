@@ -12,6 +12,8 @@ class Admin {
   protected $location_orders = [];
   protected $ignore_files = ['.','..','.DS_Store'];
   protected $allowed_post_types;
+  protected $settings;
+  protected $json_path;
 
   const NS = 'componentizer';
 
@@ -22,6 +24,8 @@ class Admin {
     // add_action( 'admin_init', array($this,'check_for_sync_on_init') );
     // Enqueue admin scripts and styles
     add_action( 'admin_enqueue_scripts', array($this,'enqueue_scripts') );
+    $this->settings = get_option('componentizer_advanced_settings');
+    $this->json_path = get_stylesheet_directory().'/'.$this->settings['json_path'];
   }
 
   // Make sure ACF is enabled
@@ -98,8 +102,8 @@ class Admin {
   }
 
   function get_json_files() {
-    if (\Componentizer\JSON_PATH) {
-      $json_files = scandir(\Componentizer\JSON_PATH);
+    if ($this->json_path) {
+      $json_files = scandir($this->json_path);
       $return_files = [];
       foreach ($json_files as $json_file) {
         if (!in_array($json_file, $this->ignore_files)) {
@@ -119,7 +123,7 @@ class Admin {
       'timestamp' => time(),
     ];
     $json = acf_json_encode($arr_to_json);
-    $f = fopen(\Componentizer\JSON_PATH."/{$file}.json", 'w');
+    $f = fopen($this->json_path."/{$file}.json", 'w');
     fwrite($f, $json);
     fclose($f);
     $this::save_json_to_db();
@@ -130,8 +134,8 @@ class Admin {
     $json_files = $this::get_json_files();
     $json_data = [];
     foreach ($json_files as $json_file) {
-      $json_data[$json_file] = hash_file('md5', \Componentizer\JSON_PATH."/{$json_file}");
-      $file_name = \Componentizer\JSON_PATH.'/'.$json_file;
+      $json_data[$json_file] = hash_file('md5', $this->json_path."/{$json_file}");
+      $file_name = $this->json_path.'/'.$json_file;
       $f = fopen($file_name, 'r');
       $json_file_data = fread($f, filesize($file_name));
       fclose($f);

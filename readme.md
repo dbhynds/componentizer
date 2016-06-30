@@ -1,38 +1,75 @@
 # Componentizer
 
-1. [Installation](#installation)
-1. [Advanced Configuration](#advanced-configuration)
-1. [Feature Requests](#feature-requests)
-1. [Additional Information](#additional-information)
+Componentizer is a tiny MVC for components, allowing users to create and rearrange components at will. Componentizer primarily handles the routing and controlling, utilizing Advanced Custom Fields PRO for the model layer and the Timber Library for the view layer. It allows you to replace the loop on every template file with, simply:
+
+```
+$components = new Componentizer\Components;
+while (have_posts()) :
+  the_post();
+  $components->build();
+endwhile;
+```
+
+Componentizer makes use of the WordPress template hierarchy, making it easy to customize the design of components depending on their context.
+
+# Gettings Started
+
+## Requirements
+
+* WordPress 3.4.0 or higher
+* PHP 5.6 or higher
+* [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) 5.3.0 or higher
+* [Timber Library](https://wordpress.org/plugins/timber-library/) 1.0 or higher
 
 ## Installation
 
-1. [Install Componentizer](#install-componentizer)
-1. [Configure Componentizer](#configure-componentizer)
-1. [Create Components](#create-components)
-1. [Create Field Groups](#create-field-groups)
-1. [Associate Groups and Components](#associate-groups-and-components)
-1. [Update Theme Files](#update-theme-files)
+1. Install and enable the [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) plugin.
+1. Install and enable the [Timber Library](https://wordpress.org/plugins/timber-library/) plugin.
+1. Install and enable the Componentizer plugin by downloading this repo and placing it into the `plugins` folder of the site.
+1. In the WordPress admin, navigate to *Componentizer > Settings*.
+1. Set the directory in the theme where the controllers will live (defaults to `controllers`).
+1. Set which post types should use **not** the componentizer (defaults to attachment, revision, nav_menu_item, acf-field-group, acf-field).
+1. Save the settings.
 
-### Install Componentizer
-1. Install and enable the Advanced Custom Fields plugin.
-1. Clone Componetizer into your theme directory.
-1. Navigate to the newly created `componentizer` directory.
-1. Rename `config-sample.php` to `config.php`.
-1. Create a folder titled `components` is the root of your theme file.
-1. Add `require('componentizer/componentizer.php');` to your theme's `functions.php` file.
+## Template Files
 
-### Configure Componentizer
-Componentizer allows you to configure several variables in `config.php`. For help configuring Componentizer for your site, navigate to the Compontentizer page under Appearance
-#### $component\_path
-The component path is the relative path in your theme where component template files are located. In step 4 of the install, we set this to `components`. However, you can move or rename it as long as it's located within your theme.
-#### $persistant\_fields
-These are fields that appear in the back and front end but aren't ACF field groups. WordPress' content editor is included by default, but others can be added or removed if desired.
-#### $exclude_order\_for\_post\_types
-The Component Order metabox will appear on all public post types except those specified here.  The default is `nav_menu_item`, `revision`, and `attachment`.
+Componentizer is designed to simplify the template hierarchy in your theme. In a fully componentized theme, instead of having dozens of template files for post types, taxonomy terms, archives, pages, etc., the theme runs from a single file: `index.php` a simple loop:
 
-### Create Components
-Build component files and place them in the `$component_path` directory.
+```
+$components = new Componentizer\Components();
+
+while (have_posts()) :
+  the_post();
+  $components->build();
+endwhile;
+```
+
+## Create Components
+
+Create ACF field groups for each component. Then create a corresponding controller in the `controllers` directory specified in the settings. **Important:** Do not use dashes (`-`) when naming controllers; underscores (`_`) are acceptable, however.
+
+In the WordPress admin, navigate to *Componentizer > Field Groups*. Assign the ACF Field Group to the base component (more on this later) that you just created.
+
+Create a new `Componentizer\Context` and populate it with data from your ACF group. Set the properties of the context using the `set()` method.
+
+```
+$context = new \Componentizer\Context();
+
+$context->property_1 = 'First Property';
+$context->set('property_key','Value of this Property');
+$context->set(['a_property' => 'A value', 'another_property', 'More value']);
+$acf_data = get_fields();
+$context->set($acf_data);
+```
+
+Once the `Context` has been populated with data, render or compile the component using Timber.
+
+```
+$context->render('my_component.twig');
+$component_html = $context->render();
+```
+
+### Components & the Template Hierarchy
 
 The same logic used for the WordPress template hierarchy is employed when choosing which component file to use. Each component must have a base component file. From there, components files can vary according to the logic of [primary and secondary templates](https://developer.wordpress.org/themes/basics/template-hierarchy/#visual-overview).
 
@@ -49,84 +86,57 @@ All primary and secondary templates (dark and light blue in the above images) wi
 * custom post type archives
 * custom taxonomies
 
-### Create Field Groups
-Create Advanced Custom Field groups to associate with component files. Each base component should have a field group associated with it. Multiple field groups can be created for the same component. However field groups variations should use identically `Field Names` (although labels can vary). Fields can be added or removed from variations.
+# Advanced Configuration
 
-### Associate Groups and Components
-Once field groups and component files have been created, navigate to "Appearance > Componentizer" in the WordPress admin. Assign each field group to a base component. Assign it a location if field groups should appear at the top or bottom of a page and not be sortable by the authors.
+## Location Orders
 
-After saving locations for field groups, reorder the top and bottom sections under "Location Orders". **Important: After changing the location of a field from sortable to top or bottom, the order must be resaved in order to go into effect. If you change a field group to top or bottom, save the page twice.**
+The order that components in the top and bottom sections are not customizable on a per-post basis. However, the admin can assign a custom order to be applied globally on the site. Top and bottom sections can be reordered under "Componentizer > Location Orders".
 
-Finally designate which field groups should be visible on archive pages.
+## Visible on Archive
 
-### Update Theme Files
-After connecting groups and components, update your theme files. Replace your loop with the following code:
-
-```
-while (have_posts()) :
-	the_post();
-	Components\build();
-endwhile;
-```
-
-After replacing the loop in the `index.php`, most other single and archive page template files can be removed. See Advanced Configuration for details.
-
-## Advanced Configuration
+To limit which field group(s) should be visible on archive pages (as opposed to single posts/pages), navigate to "Componentizer > Visible on Archive."
 
 ### Custom Page Templates
+
 Assuming the loop has been replaced in the `index.php` file, the following code can be used to create custom page templates:
 
 ```
 /**
  * Template Name: Custom Template
  */
-require('index.php');
+include (__DIR__.'/index.php');
 ```
 
-### Override User-defined Order
-Component order can be specified on a template level in order to override the user-defined order by passing an array of base component slugs.
+### Custom Component Orders
 
-```
-$custom_order = array(
-	'page_header',
-	'content'
-	'comments'
-);
-Components\build($custom_order);
-```
+Component order can be specified on a template level in order to override the user-defined order by passing an array of base component slugs. (To view available component slugs, go to "Appearance > Componentizer" and look at the section labelled "Component Files".)
 
-To view available component slugs, go to "Appearance > Componentizer" and look at the section labelled "Component Files"
+`$components->set_components(['first']);`
 
-### Specify a Custom Suffix
+Reset the list of components to its original state:
+
+`$components->reset_components();`
+
+Get the list of components:
+
+$components->get_components();
+
+### Custom Suffixes
+
 Suffixes get appended to the base template to locate the appropriate component according to the template hierarchy. However, a custom suffix(es) can be designated.
 
-Specify a custom suffix:
+Add an array of suffixes to the current list:
 
-```
-$suffix = 'special';
-Components\build(false,$suffix);
-```
+`$components->add_suffixes(['last']);`
 
-Specify a collection of custom suffixes:
+Override the current list of suffixes with a new array of suffixes:
 
-```
-$suffixes = array(
-	'extra-special',
-	'special'
-);
-Components\build(false,$suffixes);
-```
+`$components->set_suffixes(['last']);`
 
-Note: `false` should be passed as the first argument in order to not override the user-specified component order.
+Reset a list of suffixes to it's original state:
 
-## Feature Requests
-Fields on the page reflect the order in the sidebar.
+`$components->reset_suffixes();`
 
-## Additional Information
+Get the list of suffixes:
 
-### Version: 0.8
-
-### Minimum Requirements
-
-* PHP >= 5.3.10
-* WordPress >= 3.4.0
+`$components->get_suffixes();`

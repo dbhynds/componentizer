@@ -33,6 +33,7 @@ class FieldGroups {
       }
     }
     $existing_ids = get_post_meta($post_id,'_field_order',true);
+    if (!$existing_ids) $existing_ids = [];
 
     $merge = array_merge($existing_ids,$group_ids);
     $unique = array_unique($merge);

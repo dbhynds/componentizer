@@ -136,7 +136,7 @@ class SettingsPage extends Admin {
         echo '<td>'.$acf_field->post_title.'</td>';
         echo '<td>';
           echo '<input type="hidden" name="componentizer_fields['.$field_id.'][component]" value="0">';
-          echo '<label for="'.$field_id.'_top">';
+          echo '<label for="'.$field_id.'_component">';
             echo '<input type="checkbox" id="'.$field_id.'_component" name="componentizer_fields['.$field_id.'][component]" '.$is_component.' value="1">';
             _e('Component',$this::NS);
           echo '</label> ';

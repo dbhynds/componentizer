@@ -1,3 +1,5 @@
+version 1.1.0
+
 # Componentizer
 
 Componentizer is a tiny MVC for components, allowing users to create and rearrange components at will. Componentizer primarily handles the routing and controlling, utilizing Advanced Custom Fields PRO for the model layer and the Timber Library for the view layer. It allows you to replace the loop on every template file with, simply:
@@ -55,8 +57,7 @@ Create a new `Componentizer\Context` and populate it with data from your ACF gro
 ```
 $context = new \Componentizer\Context();
 
-$context->property_1 = 'First Property';
-$context->set('property_key','Value of this Property');
+$context->property_key = 'First Property';
 $context->set(['a_property' => 'A value', 'another_property', 'More value']);
 $acf_data = get_fields();
 $context->set($acf_data);

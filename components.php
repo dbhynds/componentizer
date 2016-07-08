@@ -31,10 +31,11 @@ class Components {
     $components = $this->get_components();
     $suffixes = $this->get_suffixes();
     if ($components) foreach ($components as $component) {
-      $templates = array($this->settings['component_path'].'/'.$component.'.php');
+      $templates = [];
       foreach ($suffixes as $suffix) {
-        array_unshift($templates, $this->settings['component_path'].'/'.$component.'-'.$suffix.'.php');
+        array_push($templates, $this->settings['component_path'].'/'.$component.'-'.$suffix.'.php');
       }
+      array_push($templates,$this->settings['component_path'].'/'.$component.'.php');
       $file = locate_template($templates,false,false);
       if ($file) include($file);
     }

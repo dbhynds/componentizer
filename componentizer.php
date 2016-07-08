@@ -9,14 +9,12 @@ Author: Davo Hynds
  
 // Require these files
 $componenentizer_includes = array(
-  // 'Options.php',
   'FieldGroups.php',
   'Components.php',
   'Context.php',
   'admin/Admin.php',
   'admin/SettingsPage.php',
   'admin/EditPage.php',
-  // 'admin/Migrate.php',
 );
 
 $plugin_directory = plugin_dir_path(__FILE__);

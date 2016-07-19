@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+* Methods `render` and `compile` on `Context` no longer require a twig as an argument. If called, they will fetch a twig matching the name of the file that called the method.
+
 ## 1.1.0
 
 * Method `set` on `Context` no longer accepts key value pairs because of recursive problem with arrays.

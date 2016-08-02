@@ -4,11 +4,22 @@ namespace Componentizer;
 
 class FieldGroups {
 
-  public static function get_title_by_id($id) {
+  /**
+   * Gets the title of an ACF field group by its ACF ID
+   * @param  string $id ID of the ACF field to get
+   * @return string     Title of the ACf field
+   */
+  public static function get_title_by_id($id)
+  {
     $post = self::get_acf_by_id($id);
     $title = get_the_title($post);
     return $title;
   }
+  /**
+   * Get ACF field group post objects by their ACF ID
+   * @param  string $id ID of the ACF field
+   * @return post       ACF Field Group post object
+   */
   private static function get_acf_by_id($id) {
     $args = [
       'name' => $id,
@@ -20,6 +31,11 @@ class FieldGroups {
     return array_pop($post);
   }
 
+  /**
+   * Get the field groups for a post
+   * @param  integer $post_id The ID of the post. 
+   * @return array            Array of AFC field group IDs
+   */
   public static function get_for_post($post_id) {
     $post_fields = get_post_meta($post_id,'_field_order',true);
 
@@ -42,6 +58,12 @@ class FieldGroups {
     return $ids;
   }
 
+  /**
+   * Sort ACF Fields groups according to their location
+   * @param  string $location      Can be 'top' or 'bottom'
+   * @param  array  $component_ids ACF IDs
+   * @return array                 List of ACF IDs belong to a location
+   */
   public static function sort_by_location($location, $component_ids) {
     $local_components = [];
     $location_orders = get_option('componentizer_location_orders');
@@ -62,6 +84,9 @@ class FieldGroups {
     return $local_components;
   }
 
+  /**
+   * Do the actual sorting for the top
+   */
   private static function sort_top($a, $b) {
     $orders = get_option('componentizer_location_orders');
     $top_components = $orders['top'];
@@ -69,6 +94,9 @@ class FieldGroups {
     $b_key = array_search($b, $top_components);
     return self::sort($a_key,$b_key);
   }
+  /**
+   * Do the actual sorting for the bottom
+   */
   private static function sort_bottom($a, $b) {
     $orders = get_option('componentizer_location_orders');
     $bottom_components = $orders['bottom'];
@@ -76,6 +104,7 @@ class FieldGroups {
     $b_key = array_search($b, $bottom_components);
     return self::sort($a_key,$b_key);
   }
+  
   private static function sort($a_key, $b_key) {
     if ($a_key == $b_key) {
       return 0;

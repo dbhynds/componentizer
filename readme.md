@@ -1,4 +1,4 @@
-version 1.1.1
+version 1.2.0
 
 # Componentizer
 
@@ -67,7 +67,14 @@ Once the `Context` has been populated with data, render or compile the component
 
 ```
 $context->render('my_component.twig');
-$component_html = $context->render();
+$component_html = $context->compile();
+```
+
+If the ACF field names match the variables in the twig template, and the values of the fields don't need to be modified in any way, use the `simple_render` method to quickly render the view:
+
+```
+$context = new \Componentizer\Context();
+$context->simple_render();
 ```
 
 ### Components & the Template Hierarchy

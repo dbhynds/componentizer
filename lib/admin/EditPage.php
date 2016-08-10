@@ -2,9 +2,6 @@
 
 namespace Componentizer\Admin;
 
-// Don't bother on the front end or non-admins
-if (!is_admin()) return;
-
 class EditorPage extends Admin {
 
   function __construct() {
@@ -130,6 +127,3 @@ class EditorPage extends Admin {
   }
 
 }
-
-// Initialize settings page
-new EditorPage();

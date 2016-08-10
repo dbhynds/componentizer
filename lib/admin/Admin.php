@@ -2,9 +2,6 @@
 
 namespace Componentizer\Admin;
 
-// Don't bother on the front end or non-admins
-if (!is_admin()) return;
-
 class Admin {
   
   // Options that will be loaded via config
@@ -165,6 +162,3 @@ class Admin {
   }*/
 
 }
-
-// Initialize Admin
-new Admin();

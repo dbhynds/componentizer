@@ -1,7 +1,6 @@
 {
   "name": "davohynds/componentizer",
   "version": "1.2.0",
-  "name": "roots/bedrock",
   "license": "GNU",
   "description": "A tiny MVC for WordPress components",
   "homepage": "https://github.com/dbhynds/componentizer",
@@ -10,7 +9,7 @@
       "name": "Davo Hynds",
       "email": "davo@davohynds.com",
       "homepage": "https://davohynds.com"
-    },
+    }
   ],
   "keywords": [
     "componentizer", "components", "wordpress", "wp", "composer", "twig", "timber", "acf", "advanced custom fields pro"

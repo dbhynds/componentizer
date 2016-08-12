@@ -10,7 +10,7 @@ class ComposerStaticInit388fbc08f5518c544310b6d4a9528b8b
         'C' => 
         array (
             'Composer\\Installers\\' => 20,
-            'Components\\' => 11,
+            'Componentizer\\' => 14,
         ),
     );
 
@@ -19,7 +19,7 @@ class ComposerStaticInit388fbc08f5518c544310b6d4a9528b8b
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
         ),
-        'Components\\' => 
+        'Componentizer\\' => 
         array (
             0 => __DIR__ . '/../..' . '/lib',
         ),

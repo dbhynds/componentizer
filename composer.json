@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Components\\": "lib/"
+      "Componentizer\\": "lib/"
     }
   },
   "repositories": [
@@ -30,14 +30,6 @@
   ],
   "require": {
     "php": ">=5.5",
-    "composer/installers": "~1.0.12",
-    "wpackagist-plugin/advanced-custom-fields": "^4.4",
-    "wpackagist-plugin/lazy-load-xt": "^0.4.0"
-  },
-  "extra": {
-    "installer-paths": {
-      "../mu-plugins/{$name}/": ["type:wordpress-muplugin"],
-      "../plugins/{$name}/": ["type:wordpress-plugin"]
-    }
+    "composer/installers": "~1.0.12"
   }
 }

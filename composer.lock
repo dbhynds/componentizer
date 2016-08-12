@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "85139df438c873494a5b40dafde2fd06",
-    "content-hash": "5426873a13dd1a6dbaaefe7dc186c79a",
+    "hash": "5165b9adf2e1f242886cebecc293ca5c",
+    "content-hash": "6e6b23c11171aedf3f517871d982902f",
     "packages": [
         {
             "name": "composer/installers",
@@ -106,46 +106,6 @@
                 "zikula"
             ],
             "time": "2016-04-13 19:46:30"
-        },
-        {
-            "name": "wpackagist-plugin/advanced-custom-fields",
-            "version": "4.4.8",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/advanced-custom-fields/",
-                "reference": "tags/4.4.8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/advanced-custom-fields.4.4.8.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/advanced-custom-fields/"
-        },
-        {
-            "name": "wpackagist-plugin/lazy-load-xt",
-            "version": "0.4.1",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/lazy-load-xt/",
-                "reference": "tags/0.4.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/lazy-load-xt.0.4.1.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "composer/installers": "~1.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/lazy-load-xt/"
         }
     ],
     "packages-dev": [],

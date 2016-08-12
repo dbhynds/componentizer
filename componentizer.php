@@ -17,9 +17,9 @@ if ( file_exists( $composer_autoload = __DIR__ . '/vendor/autoload.php' ) /* che
   || file_exists( $composer_autoload = get_template_directory().'/vendor/autoload.php') /* check in parent theme */
 ) {
   require_once $composer_autoload;
+  new \Componentizer\Componentizer;
 }
 
-new \Componentizer\Componentizer;
 
  
 // Require these files

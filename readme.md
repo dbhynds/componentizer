@@ -1,5 +1,3 @@
-version 1.2.0
-
 # Componentizer
 
 Componentizer is a tiny MVC for components, allowing users to create and rearrange components at will. Componentizer primarily handles the routing and controlling, utilizing Advanced Custom Fields PRO for the model layer and the Timber Library for the view layer. It allows you to replace the loop on every template file with, simply:
@@ -18,9 +16,9 @@ Componentizer makes use of the WordPress template hierarchy, making it easy to c
 
 ## Requirements
 
+* PHP 5.5 or higher
 * WordPress 3.4.0 or higher
-* PHP 5.6 or higher
-* [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) 5.3.0 or higher
+* [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) 5.3.8 or higher
 * [Timber Library](https://wordpress.org/plugins/timber-library/) 1.0 or higher
 
 ## Installation

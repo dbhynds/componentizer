@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+* Use Composer autoloader!
+
 ## 1.2.0
 
 * Added a `simple_render` method on `Context` for if you just want to get the fields and send them straight to the twig.

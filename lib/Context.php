@@ -7,13 +7,17 @@ class Context {
   protected $twig;
 
   /**
-   * By default, set the twig to the same name as the file that called it
+   * Set the twig to the same name as the file that called it, if none is
+   * specified
+   * @param string $twig Filename of the twig to render (optional)
    */
-  public function __construct()
+  public function __construct($twig = null)
   {
-    $backtrace = debug_backtrace();
-    $last_call = array_shift($backtrace);
-    $this->twig = basename($last_call['file'],'.php').'.twig';
+    if (!$twig) {
+      $backtrace = debug_backtrace();
+      $last_call = array_shift($backtrace);
+      $this->twig = basename($last_call['file'],'.php').'.twig';
+    }
   }
 
   /**
@@ -44,12 +48,12 @@ class Context {
 
   /**
    * Quickly render the content, without fussing with the fields
+   * @param  integer $id The ID of the post you wish to render
    */
-  public function simple_render()
+  public function simple_render($id = null)
   {
-    $content = get_fields();
-    $this->set($content);
-    return \Timber::render($this->twig,$this->get());
+    $content = get_fields($id);
+    return \Timber::render($this->twig,$content);
   }
 
   /**

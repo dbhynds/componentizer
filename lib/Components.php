@@ -33,14 +33,35 @@ class Components {
     $components = $this->get_components();
     $suffixes = $this->get_suffixes();
     if ($components) foreach ($components as $component) {
-      $templates = [];
-      foreach ($suffixes as $suffix) {
-        array_push($templates, $this->settings['component_path'].'/'.$component.'-'.$suffix.'.php');
+      $file = $this->get_template_file($this->settings['component_path'],$component,$suffixes);
+      if ($file) {
+        include($file);
+      } else {
+        $file = $this->get_template_file(\Timber::$dirname,$component,$suffixes,'twig');
+        if ($file) {
+          $context = new Context($file);
+          $context->simple_render();
+        }
       }
-      array_push($templates,$this->settings['component_path'].'/'.$component.'.php');
-      $file = locate_template($templates,false,false);
-      if ($file) include($file);
     }
+  }
+
+  /**
+   * Locate the best template file for a component and it's suffixes
+   * @param  string $path      Directory to search within the theme
+   * @param  string $component Basename of of the component
+   * @param  array  $suffixes  Suffixes
+   * @param  string $extension File extension of the component
+   * @return string|boolean    Path of the file to include or false
+   */
+  private function get_template_file($path, $component, $suffixes, $extension = 'php') {
+    $templates = [];
+    foreach ($suffixes as $suffix) {
+      array_push($templates, $path.'/'.$component.'-'.$suffix.'.'.$extension);
+    }
+    array_push($templates, $path.'/'.$component.'.'.$extension);
+    $file = locate_template($templates,false,false);
+    return $file;
   }
 
   /**

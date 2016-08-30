@@ -18,17 +18,17 @@ Componentizer makes use of the WordPress template hierarchy, making it easy to c
 
 * PHP 5.5 or higher
 * WordPress 3.4.0 or higher
-* [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) 5.3.8 or higher
+* [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) 5.0 or higher
 * [Timber Library](https://wordpress.org/plugins/timber-library/) 1.0 or higher
 
-## Installation
+## Installation & Configuration
 
 1. Install and enable the [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) plugin.
 1. Install and enable the [Timber Library](https://wordpress.org/plugins/timber-library/) plugin.
 1. Install and enable the Componentizer plugin by downloading this repo and placing it into the `plugins` folder of the site.
 1. In the WordPress admin, navigate to *Componentizer > Settings*.
 1. Set the directory in the theme where the controllers will live (defaults to `controllers`).
-1. Set which post types should use **not** the componentizer (defaults to attachment, revision, nav_menu_item, acf-field-group, acf-field).
+1. Set which post types should **not** use the componentizer (defaults to attachment, revision, nav_menu_item, acf-field-group, acf-field).
 1. Save the settings.
 
 ## Template Files

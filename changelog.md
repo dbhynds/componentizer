@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+* If no controller is found, `components_build` tries to `simple_render` the component.
+* Optionally, pass a post ID to the `simple_render` method on `Context`.
+* Optionally, pass a twig to a new `Context`.
+
 ## 1.3.0
 
 * Use Composer autoloader!

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ddd00a9683c9382bf7d2746f79831448",
-    "content-hash": "e49b5817636aba4539e6c0a5b9836daa",
+    "hash": "3fb497d87f7032e010732c804f324347",
+    "content-hash": "b8d8b0e66df398333d0cd336fb600bca",
     "packages": [
         {
             "name": "composer/installers",
@@ -234,16 +234,16 @@
         },
         {
             "name": "wpackagist-plugin/timber-library",
-            "version": "1.1.2",
+            "version": "1.1.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/timber-library/",
-                "reference": "tags/1.1.2"
+                "reference": "tags/1.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/timber-library.1.1.2.zip",
-                "reference": "tags/1.1.2",
+                "url": "https://downloads.wordpress.org/plugin/timber-library.1.1.4.zip",
+                "reference": null,
                 "shasum": null
             },
             "require": {

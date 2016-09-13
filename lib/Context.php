@@ -50,10 +50,12 @@ class Context {
    * Quickly render the content, without fussing with the fields
    * @param  integer $id The ID of the post you wish to render
    */
-  public function simple_render($id = null)
+  public function simpleRender($id = null)
   {
     $content = get_fields($id);
-    return \Timber::render($this->twig,$content);
+    if ($content) {
+      return \Timber::render($this->twig,$content);
+    }
   }
 
   /**

@@ -9,7 +9,7 @@ class FieldGroups {
    * @param  string $id ID of the ACF field to get
    * @return string     Title of the ACf field
    */
-  public static function get_title_by_id($id)
+  public static function getTitleById($id)
   {
     $post = self::get_acf_by_id($id);
     $title = get_the_title($post);
@@ -20,7 +20,7 @@ class FieldGroups {
    * @param  string $id ID of the ACF field
    * @return post       ACF Field Group post object
    */
-  private static function get_acf_by_id($id) {
+  private static function getAcfById($id) {
     $args = [
       'name' => $id,
       'post_type' => 'acf-field-group',
@@ -36,7 +36,7 @@ class FieldGroups {
    * @param  integer $post_id The ID of the post. 
    * @return array            Array of AFC field group IDs
    */
-  public static function get_for_post($post_id) {
+  public static function getForPost($post_id) {
     $post_fields = get_post_meta($post_id,'_field_order',true);
 
     $all_field_groups = \acf_get_field_groups();
@@ -64,7 +64,7 @@ class FieldGroups {
    * @param  array  $component_ids ACF IDs
    * @return array                 List of ACF IDs belong to a location
    */
-  public static function sort_by_location($location, $component_ids) {
+  public static function sortByLocation($location, $component_ids) {
     $local_components = [];
     $location_orders = get_option('componentizer_location_orders');
     if ($location_orders === '' || !$location_orders) $location_orders = [];

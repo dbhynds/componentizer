@@ -16,6 +16,9 @@ class Context {
     if (!$twig) {
       $backtrace = debug_backtrace();
       $last_call = array_shift($backtrace);
+      while (!array_key_exists('file', $last_call)) {
+        $last_call = array_shift($backtrace);
+      }
       $this->twig = basename($last_call['file'],'.php').'.twig';
     }
   }

@@ -39,10 +39,10 @@ class EditorPage extends Admin {
     $field_groups = new \Componentizer\FieldGroups();
 
     // Get a list components on the page
-    $field_groups_ids = $field_groups->get_for_post(get_the_ID());
+    $field_groups_ids = $field_groups->getForPost(get_the_ID());
 
-    $top = $field_groups->sort_by_location('top',$field_groups_ids);
-    $bottom = $field_groups->sort_by_location('bottom',$field_groups_ids);
+    $top = $field_groups->sortByLocation('top',$field_groups_ids);
+    $bottom = $field_groups->sortByLocation('bottom',$field_groups_ids);
     $middle = array_diff($field_groups_ids,$top,$bottom);
     $fields = compact('top','middle','bottom');
     // var_dump($fields);
@@ -54,7 +54,7 @@ class EditorPage extends Admin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.$field_groups->get_title_by_id($field).'</span>';
+      echo '<span>'.$field_groups->getTitleById($field).'</span>';
       echo '</div>';
     }
     // List sortable components
@@ -63,7 +63,7 @@ class EditorPage extends Admin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span class="sortable ui-sortable-handle">'.$field_groups->get_title_by_id($field).'</span>';
+      echo '<span class="sortable ui-sortable-handle">'.$field_groups->getTitleById($field).'</span>';
       echo '</div>';
     }
     echo '</div>';
@@ -72,7 +72,7 @@ class EditorPage extends Admin {
       // var_dump($field['sortable']
       echo '<div class="postbox component">';
       echo '<input type="checkbox" name="component_order_field_order[]" value="'.$field.'" checked style="display: none;" />';
-      echo '<span>'.$field_groups->get_title_by_id($field).'</span>';
+      echo '<span>'.$field_groups->getTitleById($field).'</span>';
       echo '</div>';
     }
     echo '</div>';
@@ -114,7 +114,7 @@ class EditorPage extends Admin {
     remove_action( 'admin_enqueue_scripts', array( $this, 'save_componentizer_build' ) );
     if (in_array(get_post_type(), $this->allowed_post_types)) {
       $componentizer = new \Componentizer\Components();
-      $built_content = $componentizer->get_build();
+      $built_content = $componentizer->getBuild();
       if ($built_content) {
         remove_action( 'save_post', array($this,'register_query_var'), 999);
         wp_update_post([

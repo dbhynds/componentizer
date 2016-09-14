@@ -35,8 +35,14 @@ class Components {
     }
     if ($components) foreach ($components as $component) {
       $class = "Componentizer\\Controllers\\$component";
-      $controller = new $class;
-      $controller->initialize();
+      if (class_exists($class)) {
+        $controller = new $class;
+        $controller->initialize();
+      } else {
+        $twig = basename(Suffixes::getTemplateFile(\Timber::$dirname,$component,'twig'));
+        $context = new Context($twig);
+        $context->simpleRender();
+      }
     }
   }
 

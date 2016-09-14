@@ -11,7 +11,7 @@ class FieldGroups {
    */
   public static function getTitleById($id)
   {
-    $post = self::get_acf_by_id($id);
+    $post = self::getAcfById($id);
     $title = get_the_title($post);
     return $title;
   }

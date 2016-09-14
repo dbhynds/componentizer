@@ -141,4 +141,22 @@ class Suffixes {
     return self::$suffixes = self::get();
   }
 
+  /**
+   * Locate the best template file for a component and it's suffixes
+   * @param  string $path      Directory to search within the theme
+   * @param  string $component Basename of of the component
+   * @param  array  $suffixes  Suffixes
+   * @param  string $extension File extension of the component
+   * @return string|boolean    Path of the file to include or false
+   */
+  public static function getTemplateFile($path, $component, $extension = 'php') {
+    $templates = [];
+    foreach (self::$suffixes as $suffix) {
+      array_push($templates, $path.'/'.$component.'-'.$suffix.'.'.$extension);
+    }
+    array_push($templates, $path.'/'.$component.'.'.$extension);
+    $file = locate_template($templates,false,false);
+    return $file;
+  }
+
 }

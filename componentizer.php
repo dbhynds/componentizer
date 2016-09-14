@@ -10,12 +10,7 @@ Author: Davo Hynds
 // we look for Composer files first in the plugins dir.
 // then in the wp-content dir (site install).
 // and finally in the current themes directories.
-if ( file_exists( $composer_autoload = __DIR__ . '/vendor/autoload.php' ) /* check in self */
-  || file_exists( $composer_autoload = WP_CONTENT_DIR.'/vendor/autoload.php') /* check in wp-content */
-  || file_exists( $composer_autoload = plugin_dir_path( __FILE__ ).'vendor/autoload.php') /* check in plugin directory */
-  || file_exists( $composer_autoload = get_stylesheet_directory().'/vendor/autoload.php') /* check in child theme */
-  || file_exists( $composer_autoload = get_template_directory().'/vendor/autoload.php') /* check in parent theme */
-) {
+if ( file_exists( $composer_autoload = __DIR__ . '/vendor/autoload.php' ) ) {
   $composer = require_once $composer_autoload;
   new \Componentizer\Componentizer;
 
@@ -37,27 +32,7 @@ if ( file_exists( $composer_autoload = __DIR__ . '/vendor/autoload.php' ) /* che
 }
 
 
- 
-// Require these files
-/*$componenentizer_includes = array(
-  'FieldGroups.php',
-  'Components.php',
-  'Context.php',
-  'admin/Admin.php',
-  'admin/SettingsPage.php',
-  'admin/EditPage.php',
-);
 
-$plugin_directory = plugin_dir_path(__FILE__);
-foreach ($componenentizer_includes as $file) {
-  $filepath = $plugin_directory.$file;
-  if (!file_exists($filepath)) {
-    trigger_error(sprintf(__('Error locating %s for inclusion', 'componentizer'), $filepath), E_USER_ERROR);
-  }
-
-  require_once $filepath;
-}
-unset($file, $filepath);*/
 
 register_activation_hook( __FILE__, 'componentizer_activate' );
 

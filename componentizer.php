@@ -16,8 +16,24 @@ if ( file_exists( $composer_autoload = __DIR__ . '/vendor/autoload.php' ) /* che
   || file_exists( $composer_autoload = get_stylesheet_directory().'/vendor/autoload.php') /* check in child theme */
   || file_exists( $composer_autoload = get_template_directory().'/vendor/autoload.php') /* check in parent theme */
 ) {
-  require_once $composer_autoload;
+  $composer = require_once $composer_autoload;
   new \Componentizer\Componentizer;
+
+  // Audoload Controllers directory
+  $controllers_directory = get_template_directory().'/';
+  $componentizer_advanced_settings = get_option('componentizer_advanced_settings');
+  if ($componentizer_advanced_settings && array_key_exists('component_path', $componentizer_advanced_settings)) {
+    $controllers_directory .= $componentizer_advanced_settings['component_path'];
+  } else {
+    $controllers_directory .= 'controllers';
+  }
+  if (file_exists($controllers_directory)) {
+    $composer->add('\\Componentizer\\Controllers',$controllers_directory);
+  } else {
+    add_action('admin_notices',function(){
+      echo '<div class="error"><p>'.__('Error: Controllers directory could not be found.', 'componentizer').'</p></div>';
+    });
+  }
 }
 
 

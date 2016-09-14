@@ -34,7 +34,7 @@ class Components {
       $components = $this->getComponents();
     }
     if ($components) foreach ($components as $component) {
-      $class = "Componentizer\\$component";
+      $class = "Componentizer\\Controllers\\$component";
       $controller = new $class;
       $controller->initialize();
     }

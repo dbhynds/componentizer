@@ -57,7 +57,8 @@ class Context {
   {
     $content = get_fields($id);
     if ($content) {
-      return \Timber::render($this->twig,$content);
+      $this->set($content);
+      return \Timber::render($this->twig,$this->get());
     }
   }
 

@@ -11,7 +11,7 @@ Author: Davo Hynds
 // then in the wp-content dir (site install).
 // and finally in the current themes directories.
 if ( file_exists( $composer_autoload = __DIR__ . '/vendor/autoload.php' ) ) {
-  $composer = require_once $composer_autoload;
+  $composer = require $composer_autoload;
   new \Componentizer\Componentizer;
 
   // Audoload Controllers directory

@@ -1,0 +1,506 @@
+{
+    "key": "group_577c28902042c",
+    "title": "Components",
+    "fields": [
+        {
+            "key": "field_577c28cf6f9c7",
+            "label": "Components",
+            "name": "components",
+            "type": "flexible_content",
+            "instructions": "<p>Add content to the page by clicking the \"Add Component\" button and choosing which type of component you want to include. Components can be rearranged by dragging and dropping their label. You can also create or delete components using the <code>+<\/code> and <code>-<\/code> buttons that appear when hovering over a component's label.<\/p>\r\n<ul>\r\n<li><strong>Lead<\/strong> is a larger, styled paragraph that should be included at the top of the page.<\/li>\r\n<li><strong>Content<\/strong> is a basic content component with a WYSIWYG editor.<\/li>\r\n<li><strong>Primary Teaser<\/strong> is a large call to action with two possible layouts. Generally, it should only be used once on a page.<\/li>\r\n<li><strong>Teasers<\/strong> is a group of teasers that appear in columns as a block.<\/li>\r\n<li><strong>Article List<\/strong> is a custom-curated list of links displayed like a feed.<\/li>\r\n<\/ul>",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "button_label": "Add Component",
+            "min": "",
+            "max": "",
+            "layouts": [
+                {
+                    "key": "577ff8d4aceb3",
+                    "name": "lead",
+                    "label": "Lead",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_577ff8deaceb4",
+                            "label": "Lead",
+                            "name": "lead",
+                            "type": "textarea",
+                            "instructions": "The lead paragraph displays slightly larger and with special styling",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": 6,
+                            "new_lines": "br",
+                            "readonly": 0,
+                            "disabled": 0
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "577c28d37e035",
+                    "name": "plain_content",
+                    "label": "Plain Content",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_577c28d56f9c8",
+                            "label": "Content",
+                            "name": "content",
+                            "type": "wysiwyg",
+                            "instructions": "<a href=\"https:\/\/make.wordpress.org\/support\/user-manual\/content\/editors\/visual-editor\/\" target=\"_blank\">Here are some instructions on how to use the visual editor on wordpress.com<\/a>",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "tabs": "all",
+                            "toolbar": "full",
+                            "media_upload": 1
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "577fb6b8c69c5",
+                    "name": "primary_teaser",
+                    "label": "Primary Teaser",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_577fb6d1c69c6",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "Add a heading to the teaser",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": "",
+                            "readonly": 0,
+                            "disabled": 0
+                        },
+                        {
+                            "key": "field_577fb6d6c69c7",
+                            "label": "Content",
+                            "name": "content",
+                            "type": "textarea",
+                            "instructions": "Give a short description of the teaser",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "maxlength": "",
+                            "rows": "",
+                            "new_lines": "wpautop",
+                            "readonly": 0,
+                            "disabled": 0
+                        },
+                        {
+                            "key": "field_577fb6dcc69c8",
+                            "label": "Link Text",
+                            "name": "link_text",
+                            "type": "text",
+                            "instructions": "Specify the link text",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": "",
+                            "readonly": 0,
+                            "disabled": 0
+                        },
+                        {
+                            "key": "field_577fb6e4c69c9",
+                            "label": "Link",
+                            "name": "link",
+                            "type": "text",
+                            "instructions": "Include a link to the featured content. Remember to include the \"http:\/\/\" or \"https:\/\/\"",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": "",
+                            "readonly": 0,
+                            "disabled": 0
+                        },
+                        {
+                            "key": "field_577fb6e8c69ca",
+                            "label": "Image",
+                            "name": "image",
+                            "type": "image",
+                            "instructions": "Choose an image to include with the featured content",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "preview_size": "thumbnail",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": ""
+                        },
+                        {
+                            "key": "field_57850610d7653",
+                            "label": "Type",
+                            "name": "type",
+                            "type": "radio",
+                            "instructions": "Choose the type of primary teaser. The Action teaser displays dark text on a light blue gradient, whereas the Featured teaser displays light text on a dark teal background",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "action": "Action",
+                                "featured": "Featured"
+                            },
+                            "allow_null": 0,
+                            "other_choice": 0,
+                            "save_other_choice": 0,
+                            "default_value": "",
+                            "layout": "vertical"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "577c29b0e35c0",
+                    "name": "teasers",
+                    "label": "Teasers",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_577c29b0e35c2",
+                            "label": "Teasers",
+                            "name": "teasers",
+                            "type": "flexible_content",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "button_label": "Add Teaser",
+                            "min": "",
+                            "max": "",
+                            "layouts": [
+                                {
+                                    "key": "577c28e18307d",
+                                    "name": "teaser",
+                                    "label": "Teaser",
+                                    "display": "block",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_577c29b0e35c3",
+                                            "label": "Heading",
+                                            "name": "heading",
+                                            "type": "text",
+                                            "instructions": "Add a heading to the teaser",
+                                            "required": 1,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "placeholder": "",
+                                            "prepend": "",
+                                            "append": "",
+                                            "maxlength": "",
+                                            "readonly": 0,
+                                            "disabled": 0
+                                        },
+                                        {
+                                            "key": "field_577c29b0e35c4",
+                                            "label": "Content",
+                                            "name": "content",
+                                            "type": "textarea",
+                                            "instructions": "Give a short description of the teaser",
+                                            "required": 1,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "placeholder": "",
+                                            "maxlength": "",
+                                            "rows": 3,
+                                            "new_lines": "wpautop",
+                                            "readonly": 0,
+                                            "disabled": 0
+                                        },
+                                        {
+                                            "key": "field_577c29b0e35c5",
+                                            "label": "Link Text",
+                                            "name": "link_text",
+                                            "type": "text",
+                                            "instructions": "Specify the link text",
+                                            "required": 1,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "placeholder": "",
+                                            "prepend": "",
+                                            "append": "",
+                                            "maxlength": "",
+                                            "readonly": 0,
+                                            "disabled": 0
+                                        },
+                                        {
+                                            "key": "field_577c29b0e35c6",
+                                            "label": "Link",
+                                            "name": "link",
+                                            "type": "text",
+                                            "instructions": "Include a link to the featured content. Remember to include the \"http:\/\/\" or \"https:\/\/\"",
+                                            "required": 1,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "placeholder": "",
+                                            "prepend": "",
+                                            "append": "",
+                                            "maxlength": "",
+                                            "readonly": 0,
+                                            "disabled": 0
+                                        },
+                                        {
+                                            "key": "field_577c29b0e35c7",
+                                            "label": "Image",
+                                            "name": "image",
+                                            "type": "image",
+                                            "instructions": "Choose an image to include with the featured content",
+                                            "required": 0,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "return_format": "array",
+                                            "preview_size": "thumbnail",
+                                            "library": "all",
+                                            "min_width": "",
+                                            "min_height": "",
+                                            "min_size": "",
+                                            "max_width": "",
+                                            "max_height": "",
+                                            "max_size": "",
+                                            "mime_types": ""
+                                        }
+                                    ],
+                                    "min": "",
+                                    "max": ""
+                                },
+                                {
+                                    "key": "577c298105404",
+                                    "name": "remainder",
+                                    "label": "Remainder",
+                                    "display": "block",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_577c29b0e35c8",
+                                            "label": "Content",
+                                            "name": "content",
+                                            "type": "wysiwyg",
+                                            "instructions": "Add a block of text at the end of a list of teasers. <a href=\"https:\/\/make.wordpress.org\/support\/user-manual\/content\/editors\/visual-editor\/\" target=\"_blank\">Here are some instructions on how to use the visual editor on wordpress.com<\/a>",
+                                            "required": 1,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "tabs": "all",
+                                            "toolbar": "full",
+                                            "media_upload": 1
+                                        }
+                                    ],
+                                    "min": "",
+                                    "max": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                {
+                    "key": "577fce8a13b3b",
+                    "name": "article_list",
+                    "label": "Article List",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_577fced513b3c",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "Add a heading to the list of articles",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": "",
+                            "readonly": 0,
+                            "disabled": 0
+                        },
+                        {
+                            "key": "field_577fceda13b3d",
+                            "label": "Articles",
+                            "name": "articles",
+                            "type": "relationship",
+                            "instructions": "Choose a collection of links to include. Search by type or taxonomy term. Links can be added, removed or rearranged.",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "post_type": [
+
+                            ],
+                            "taxonomy": [
+
+                            ],
+                            "filters": [
+                                "search",
+                                "post_type",
+                                "taxonomy"
+                            ],
+                            "elements": [
+                                "featured_image"
+                            ],
+                            "min": "",
+                            "max": "",
+                            "return_format": "object"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            },
+            {
+                "param": "page_type",
+                "operator": "!=",
+                "value": "posts_page"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 100,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1469718949
+}

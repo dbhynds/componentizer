@@ -1,0 +1,111 @@
+{
+    "key": "group_577ffd1a668c2",
+    "title": "Header - Post",
+    "fields": [
+        {
+            "key": "field_577ffd1a6a0be",
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "Fill out the page title to display on this page. This field is optional and overrides the designated title above. Only fill out this field if you want the title displayed on this page to be different from the title referenced elsewhere (menus, lists, archives, etc.)",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_577ffd1a6a184",
+            "label": "Subtitle",
+            "name": "subtitle",
+            "type": "text",
+            "instructions": "Add a subtitle which will appear below the page title",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        },
+        {
+            "key": "field_577ffd1a6a23b",
+            "label": "Header Image",
+            "name": "header_image",
+            "type": "image",
+            "instructions": "Add a header image which will appear at the top of the page, above the breadcrumbs. If this post has a featured image enabled, this will override the featured image on this page only. The featured image will still display on lists and archive pages.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": ""
+        },
+        {
+            "key": "field_577ffd98349be",
+            "label": "Kicker",
+            "name": "kicker",
+            "type": "text",
+            "instructions": "Fill in the kicker, which will be displayed above the title on lists and archive pages.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": "",
+            "readonly": 0,
+            "disabled": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": 1,
+    "description": "",
+    "modified": 1468941170
+}

@@ -16,12 +16,11 @@ class ComponentsTest extends WP_UnitTestCase {
 
   function setUp()
   {
-    $this->plugin_file = dirname( dirname( __FILE__ ) ) . '/componentizer.php';
+    $this->plugin_slug = dirname( dirname( __FILE__ ) ) . '/componentizer.php';
     parent::setUp();
 
     $post = $this->factory->post->create();
     do_action('init');
-    // $this->import_acf_data();
     $this->components = new \Componentizer\Components;
   }
 
@@ -35,9 +34,6 @@ class ComponentsTest extends WP_UnitTestCase {
     $post = wp_insert_post( array_merge($defaults,$post_data) );
     add_post_meta($post,'_field_order',['group_577bd8e2200a8','group_577bd43036a0f']);
     return $post;
-    
-    
-     
   }
 
   function setUpPost($post_id = null)

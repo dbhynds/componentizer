@@ -19,8 +19,9 @@ class Context {
       while (!array_key_exists('file', $last_call)) {
         $last_call = array_shift($backtrace);
       }
-      $this->twig = basename($last_call['file'],'.php').'.twig';
+      $twig = basename($last_call['file'],'.php').'.twig';
     }
+    $this->twig = $twig;
   }
 
   /**

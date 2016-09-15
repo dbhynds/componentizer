@@ -10,21 +10,26 @@ Class SetupTestDb {
     tests_add_filter( 'muplugins_loaded', [$this,'manually_load_plugins'] );
     tests_add_filter( 'muplugins_loaded', [$this,'import_acf_data'] );
     tests_add_filter( 'muplugins_loaded', [$this,'set_componentizer_options'] );
-
+    tests_add_filter( 'muplugins_loaded', [$this,'set_theme'] );
   }
 
   function manually_load_plugins()
   {
-    $sage = switch_theme('sage');
     $plugins = [
       'componentizer/componentizer.php',
       'advanced-custom-fields-pro/acf.php',
       'timber-library/timber.php'
     ];
     foreach ($plugins as $plugin) {
-      require dirname( dirname( __FILE__ ) ) . '/../' . $plugin;
+      require dirname( dirname( dirname( __FILE__ ) ) ) .'/'. $plugin;
     }
     update_option( 'active_plugins', $plugins );
+  }
+
+  function set_theme()
+  {
+    register_theme_directory( dirname( __FILE__ ) );
+    $theme = switch_theme('sample-theme');
   }
 
   function set_componentizer_options()

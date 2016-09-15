@@ -9,6 +9,8 @@ Class SetupTestDb {
   {
     tests_add_filter( 'muplugins_loaded', [$this,'manually_load_plugins'] );
     tests_add_filter( 'muplugins_loaded', [$this,'import_acf_data'] );
+    tests_add_filter( 'muplugins_loaded', [$this,'set_componentizer_options'] );
+
   }
 
   function manually_load_plugins()
@@ -23,6 +25,25 @@ Class SetupTestDb {
       require dirname( dirname( __FILE__ ) ) . '/../' . $plugin;
     }
     update_option( 'active_plugins', $plugins );
+  }
+
+  function set_componentizer_options()
+  {
+    $componentizer_fields = [
+      "group_577bd8e2200a8" => [
+        "component" => "1",
+        "template" => "PageHeader",
+        "location" => "top",
+      ],
+      "group_577bd43036a0f" => [
+        "component" => "1",
+        "template" => "Content",
+        "location" => "sortable",
+      ]
+    ];
+    update_option('componentizer_fields',$componentizer_fields);
+    $componentizer_visible_on_archive = ['group_577bd8e2200a8','group_577bd43036a0f'];
+    update_option('componentizer_visible_on_archive',$componentizer_visible_on_archive);
   }
 
   function import_acf_data()

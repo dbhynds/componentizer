@@ -73,4 +73,13 @@ class ContextTest extends WP_UnitTestCase {
     $this->assertEquals($returned_data,$test_data);
   }
 
+  function test_simpleRender()
+  {
+    $post_id = $this->setUpPost();
+    update_field('plain_content','Plain Content',$post_id);
+    $this->expectOutputString('Content.twig\n  Plain Content');
+    $context = new \Componentizer\Context('Content.twig');
+    $context->simpleRender($post_id);
+  }
+
 }
